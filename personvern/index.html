@@ -7,45 +7,89 @@
 <link rel="icon" href="../ikon.png">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sky-top: #0F4C75; --sky-bottom: #1B6FA8;
+    --crest: #DDF1FA; --accent: #8FD8FF;
+    --text: #F4FAFD; --deep: #08243C;
+  }
   body {
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-    background: #08243C; color: #F4FAFD; line-height: 1.65;
+    background: var(--deep); color: var(--text); line-height: 1.65;
   }
-  header {
-    background: linear-gradient(#0F4C75, #1B6FA8);
-    padding: 48px 24px 20px; text-align: center;
+  .hero {
+    position: relative; overflow: hidden; min-height: 240px;
+    background: linear-gradient(var(--sky-top), var(--sky-bottom));
+    text-align: center;
   }
-  header h1 { font-size: 1.5rem; font-weight: 700; }
-  header p { opacity: .75; font-size: .9rem; margin-top: 4px; }
-  .boelge { display: block; width: 100%; height: 50px; }
-  .havtopp { background: linear-gradient(#1B6FA8, #1B6FA8); }
-  main { max-width: 620px; margin: 0 auto; padding: 36px 24px 48px; }
-  h2 { font-size: 1.15rem; margin: 28px 0 8px; }
+  .hero-innhold { position: relative; z-index: 2; padding: 44px 24px 100px; }
+  .hero img { width: 56px; height: 56px; border-radius: 13px;
+              box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+  h1 { font-size: 1.45rem; font-weight: 800; margin-top: 10px; }
+  .dato { opacity: .75; font-size: .88rem; margin-top: 4px; }
+  .sjo { position: absolute; left: 0; right: 0; bottom: 0; height: 64px;
+         z-index: 1; overflow: hidden; }
+  .sjo svg { position: absolute; bottom: 0; left: 0; width: 200%;
+             height: 100%; display: block;
+             animation: driv 18s linear infinite; }
+  @keyframes driv { from { transform: translateX(0); }
+                    to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .sjo svg { animation: none; } }
+
+  main { max-width: 620px; margin: 0 auto; padding: 32px 24px 56px; }
+  .tilbake {
+    display: inline-block; margin-bottom: 20px; padding: 8px 16px;
+    border-radius: 999px; font-size: .9rem; text-decoration: none;
+    color: var(--text); background: rgba(143,216,255,.12);
+    border: 1px solid rgba(143,216,255,.25);
+  }
+  .kortversjon {
+    padding: 20px 24px; border-radius: 18px; font-size: 1.05rem;
+    background: rgba(143,216,255,.10);
+    border: 1px solid rgba(143,216,255,.25);
+  }
+  h2 { font-size: 1.12rem; margin: 30px 0 8px; }
   p + p { margin-top: 12px; }
   ul { margin: 10px 0 10px 22px; }
-  li { margin-top: 4px; }
-  a { color: #8FD8FF; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .tilbake { display: inline-block; margin-bottom: 8px; font-size: .9rem; }
-  hr { border: none; border-top: 1px solid rgba(244,250,253,.15); margin: 36px 0; }
+  li { margin-top: 5px; }
+  a { color: var(--accent); }
+  hr { border: none; border-top: 1px solid rgba(244,250,253,.15); margin: 38px 0; }
   .en { opacity: .85; font-size: .95rem; }
+  .en h2 { margin-top: 0; }
 </style>
 </head>
 <body>
-<header>
-  <h1>Personvernerklæring — Flo og Fjære</h1>
-  <p>Sist oppdatert: 26. juli 2026</p>
-</header>
-<svg class="boelge" viewBox="0 0 1200 50" preserveAspectRatio="none" aria-hidden="true" style="background:#1B6FA8">
-  <path d="M0,24 C200,10 400,38 600,26 C800,16 1000,34 1200,24 L1200,50 L0,50 Z" fill="#08243C"/>
-  <path d="M0,24 C200,10 400,38 600,26 C800,16 1000,34 1200,24" fill="none" stroke="#DDF1FA" stroke-width="3" stroke-linecap="round"/>
-</svg>
-<main>
-  <a class="tilbake" href="../">← Flo og Fjære</a>
 
-  <h2>Kort versjon</h2>
-  <p>Flo og Fjære samler ikke inn noen data om deg. Alt appen gjør,
-  skjer lokalt på telefonen din.</p>
+<header class="hero">
+  <div class="hero-innhold">
+    <a href="../"><img src="../ikon.png" alt="Flo og Fjære-ikonet"></a>
+    <h1>Personvern</h1>
+    <p class="dato">Flo og Fjære · Sist oppdatert 26. juli 2026</p>
+  </div>
+  <div class="sjo" aria-hidden="true">
+    <svg viewBox="0 0 2400 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="vann" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2E8FC4"/>
+          <stop offset="1" stop-color="#08243C"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
+               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38
+               L2400,100 L0,100 Z" fill="url(#vann)"/>
+      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
+               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38"
+            fill="none" stroke="#DDF1FA" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+  <a class="tilbake" href="../">← Til forsiden</a>
+
+  <div class="kortversjon">
+    <strong>Kort versjon:</strong> Flo og Fjære samler ikke inn noen
+    data om deg. Alt appen gjør, skjer lokalt på telefonen din.
+  </div>
 
   <h2>Hva appen gjør med data</h2>
   <p><strong>Posisjon.</strong> Hvis du gir appen tilgang til posisjon,
@@ -104,5 +148,6 @@
     <p>Contact: <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a></p>
   </div>
 </main>
+
 </body>
 </html>
