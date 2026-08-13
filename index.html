@@ -9,6 +9,7 @@
 <meta property="og:description" content="Se sjøen der du er — uten nett. Tidevann for hele norskekysten, beregnet på telefonen.">
 <meta property="og:image" content="https://villholth.github.io/floogfjare/og-bilde.png">
 <meta property="og:url" content="https://villholth.github.io/floogfjare/">
+<meta name="apple-itunes-app" content="app-id=6794909612">
 <link rel="icon" href="/floogfjare/ikon.png">
 <link rel="apple-touch-icon" href="/floogfjare/ikon.png">
 <style>
@@ -51,6 +52,10 @@
   .tagline {
     margin-top: 8px; font-size: clamp(1.05rem, 3vw, 1.25rem); opacity: .9;
   }
+  /* Apples offisielle merke: aldri modifisert, minst 40 px høyt,
+     luft rundt på minst kvart høyde (retningslinjene). */
+  .lastned { display: inline-block; margin-top: 26px; }
+  .lastned img { display: block; height: 52px; width: auto; }
 
   /* Sjøen: to bølgelag som driver sakte mot hverandre. */
   .sjo { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; z-index: 1; }
@@ -124,6 +129,9 @@
     <img class="ikon" src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet">
     <h1>Flo og Fjære</h1>
     <p class="tagline">Se sjøen der du er&nbsp;— uten nett</p>
+    <a class="lastned" href="https://apps.apple.com/no/app/id6794909612">
+      <img src="/floogfjare/appstore-merke.svg" alt="Last ned i App Store">
+    </a>
   </div>
   <div class="sjo" aria-hidden="true">
     <div class="lag lag-bak">
