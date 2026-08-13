@@ -5,8 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Flo og Fjære – tidevann</title>
 <meta name="description" content="Se sjøen der du er — uten nett. Tidevann for hele norskekysten, beregnet på telefonen.">
-<link rel="icon" href="ikon.png">
-<link rel="apple-touch-icon" href="ikon.png">
+<meta property="og:title" content="Flo og Fjære – tidevann">
+<meta property="og:description" content="Se sjøen der du er — uten nett. Tidevann for hele norskekysten, beregnet på telefonen.">
+<meta property="og:image" content="https://villholth.github.io/floogfjare/og-bilde.png">
+<meta property="og:url" content="https://villholth.github.io/floogfjare/">
+<link rel="icon" href="/floogfjare/ikon.png">
+<link rel="apple-touch-icon" href="/floogfjare/ikon.png">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -98,13 +102,16 @@
   }
   .kort a.knapp:hover { filter: brightness(1.08); }
   a { color: var(--accent); }
+  .avsnitt { margin-top: 36px; }
+  .avsnitt h2 { font-size: 1.15rem; margin-bottom: 8px; }
+  .avsnitt p { line-height: 1.7; opacity: .92; }
   .merknad {
     margin-top: 36px; text-align: center; font-size: .88rem;
     opacity: .6; line-height: 1.6;
   }
   footer {
     text-align: center; padding: 26px 24px 40px; font-size: .85rem;
-    opacity: .5; line-height: 1.7;
+    opacity: .65; line-height: 1.7;
   }
   footer a { color: inherit; }
 </style>
@@ -114,7 +121,7 @@
 <header class="hero">
   <div class="horisont" aria-hidden="true"></div>
   <div class="hero-innhold">
-    <img class="ikon" src="ikon.png" alt="Flo og Fjære-ikonet">
+    <img class="ikon" src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet">
     <h1>Flo og Fjære</h1>
     <p class="tagline">Se sjøen der du er&nbsp;— uten nett</p>
   </div>
@@ -155,11 +162,28 @@
   men de står der når du vil ha dem.</p>
 
   <div class="chips">
-    <span class="chip">✈️ Tidevann uten nett</span>
-    <span class="chip">🌊 4 372 punkter langs kysten</span>
-    <span class="chip">🗺️ Data fra Kartverket</span>
-    <span class="chip">🔒 Samler ingen data</span>
+    <span class="chip"><span aria-hidden="true">✈️</span> Tidevann uten nett</span>
+    <span class="chip"><span aria-hidden="true">🌊</span> 4 372 punkter langs kysten</span>
+    <span class="chip"><span aria-hidden="true">🗺️</span> Data fra Kartverket</span>
+    <span class="chip"><span aria-hidden="true">🔒</span> Samler ingen data</span>
+    <span class="chip"><span aria-hidden="true">⚙️</span> Regnes ut på telefonen</span>
   </div>
+
+  <section class="avsnitt">
+    <h2>Regnet ut, ikke hentet ned</h2>
+    <p>De fleste tidevannsapper laster ned en ferdig tabell. Flo og
+    Fjære har i stedet en matematisk modell av hvordan månen og sola
+    drar i havet langs norskekysten, og regner ut vannstanden selv.
+    Derfor svarer appen med én gang, også i flymodus.</p>
+  </section>
+
+  <section class="avsnitt">
+    <h2>Testet mot fasit</h2>
+    <p>Beregningene er kontrollert mot Kartverkets offisielle
+    tidevannstabeller for ti havner fra Oslo til Ny-Ålesund.
+    Tidspunktene for høyvann og lavvann stemmer på under to
+    minutter.</p>
+  </section>
 
   <div class="kort-rad">
     <div class="kort">
@@ -174,7 +198,14 @@
       <h2>Personvern</h2>
       <p>Appen samler ikke inn noen data. Alt beregnes lokalt på
       telefonen — også posisjonen din blir der.</p>
-      <a class="knapp" href="personvern/">Les erklæringen</a>
+      <a class="knapp" href="/floogfjare/personvern/">Les erklæringen</a>
+    </div>
+    <div class="kort">
+      <span class="emoji" aria-hidden="true">👤</span>
+      <h2>Om prosjektet</h2>
+      <p>Flo og Fjære er laget av én person på fritiden. Alle
+      henvendelser leses og besvares, men feilretting skjer når jeg
+      har tid, og jeg lover ingen tidsfrister.</p>
     </div>
   </div>
 
@@ -184,7 +215,7 @@
 </main>
 
 <footer>
-  © 2026 Daniel Hellenes · <a href="personvern/">Personvern</a><br>
+  © 2026 Daniel Hellenes · <a href="/floogfjare/personvern/">Personvern</a> · <a href="/floogfjare/vilkar/">Vilkår</a><br>
   Tidevannsdata © Kartverket
 </footer>
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vilkår for bruk — Flo og Fjære</title>
+<meta name="description" content="Vilkår for bruk av Flo og Fjære: kjøp håndteres av Apple, appen leveres som den er, og den skal ikke brukes til navigasjon.">
+<meta property="og:title" content="Vilkår for bruk — Flo og Fjære">
+<meta property="og:description" content="Vilkår for bruk av Flo og Fjære: kjøp håndteres av Apple, appen leveres som den er, og den skal ikke brukes til navigasjon.">
+<meta property="og:image" content="https://villholth.github.io/floogfjare/og-bilde.png">
+<meta property="og:url" content="https://villholth.github.io/floogfjare/vilkar/">
+<link rel="icon" href="/floogfjare/ikon.png">
+<link rel="apple-touch-icon" href="/floogfjare/ikon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sky-top: #0F4C75; --sky-bottom: #1B6FA8;
+    --crest: #DDF1FA; --accent: #8FD8FF;
+    --text: #F4FAFD; --deep: #08243C;
+  }
+  body {
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    background: var(--deep); color: var(--text); line-height: 1.65;
+  }
+  .hero {
+    position: relative; overflow: hidden; min-height: 240px;
+    background: linear-gradient(var(--sky-top), var(--sky-bottom));
+    text-align: center;
+  }
+  .hero-innhold { position: relative; z-index: 2; padding: 44px 24px 100px; }
+  .hero img { width: 56px; height: 56px; border-radius: 13px;
+              box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+  h1 { font-size: 1.45rem; font-weight: 800; margin-top: 10px; }
+  .dato { opacity: .75; font-size: .88rem; margin-top: 4px; }
+  .sjo { position: absolute; left: 0; right: 0; bottom: 0; height: 64px;
+         z-index: 1; overflow: hidden; }
+  .sjo svg { position: absolute; bottom: 0; left: 0; width: 200%;
+             height: 100%; display: block;
+             animation: driv 18s linear infinite; }
+  @keyframes driv { from { transform: translateX(0); }
+                    to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .sjo svg { animation: none; } }
+
+  main { max-width: 620px; margin: 0 auto; padding: 32px 24px 56px; }
+  .tilbake {
+    display: inline-block; margin-bottom: 20px; padding: 8px 16px;
+    border-radius: 999px; font-size: .9rem; text-decoration: none;
+    color: var(--text); background: rgba(143,216,255,.12);
+    border: 1px solid rgba(143,216,255,.25);
+  }
+  .kortversjon {
+    padding: 20px 24px; border-radius: 18px; font-size: 1.05rem;
+    background: rgba(143,216,255,.10);
+    border: 1px solid rgba(143,216,255,.25);
+  }
+  h2 { font-size: 1.12rem; margin: 30px 0 8px; }
+  p + p { margin-top: 12px; }
+  a { color: var(--accent); }
+  footer {
+    text-align: center; padding: 26px 24px 40px; font-size: .85rem;
+    opacity: .65; line-height: 1.7;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-innhold">
+    <a href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet"></a>
+    <h1>Vilkår for bruk</h1>
+    <p class="dato">Flo og Fjære · Sist oppdatert 13. august 2026</p>
+  </div>
+  <div class="sjo" aria-hidden="true">
+    <svg viewBox="0 0 2400 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="vann" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2E8FC4"/>
+          <stop offset="1" stop-color="#08243C"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
+               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38
+               L2400,100 L0,100 Z" fill="url(#vann)"/>
+      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
+               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38"
+            fill="none" stroke="#DDF1FA" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+  <a class="tilbake" href="/floogfjare/">← Til forsiden</a>
+
+  <h2>Om disse vilkårene</h2>
+  <p>Flo og Fjære er utviklet av Daniel Hellenes som privatperson.
+  Disse vilkårene gjelder bruk av appen.</p>
+  <p>Kjøp gjøres ikke hos meg. Appen distribueres gjennom App Store,
+  og Apple er selger. Kjøpsvilkår, betaling, kvittering og refusjon
+  håndteres av Apple etter deres vilkår. Ønsker du refusjon, tar du
+  kontakt med Apple, ikke med meg.</p>
+  <p>Med mindre annet er avtalt, gjelder Apples standard lisensavtale
+  for sluttbrukere (Apple Standard EULA) i tillegg til det som står
+  her.</p>
+
+  <h2>Hva appen er</h2>
+  <p>Appen beregner astronomisk tidevann, altså vannstanden som følger
+  av månens og solens tiltrekning. Beregningen skjer lokalt på
+  telefonen din.</p>
+  <p>Tidevannsdataene bygger på materiale fra Kartverket,
+  Sjødivisjonen.</p>
+
+  <h2>Hva appen ikke er</h2>
+  <p>Appen skal ikke brukes til navigasjon. Den er ikke godkjent for
+  det formålet og skal ikke erstatte sjøkart, offisielle
+  tidevannstabeller eller annen navigasjonsinformasjon.</p>
+  <p>Beregningene viser astronomisk tidevann. Faktisk vannstand kan
+  avvike, særlig ved stormflo, lavt lufttrykk eller sterk vind.
+  Avviket kan være betydelig.</p>
+  <p>Du er selv ansvarlig for beslutninger du tar på grunnlag av
+  informasjon fra appen.</p>
+
+  <h2>Levering «som den er»</h2>
+  <p>Appen leveres som den er, med de funksjonene den har på
+  kjøpstidspunktet.</p>
+  <p>Det gis ingen garanti for at appen er feilfri, at feil vil bli
+  rettet, eller at det kommer oppdateringer eller nye funksjoner.
+  Dette er et fritidsprosjekt utviklet av én person på fritiden, og
+  det gis ingen tidsfrister for feilretting eller support.</p>
+  <p>Jeg forbeholder meg retten til å endre, begrense eller avslutte
+  appen eller enkeltfunksjoner. Jeg forbeholder meg også retten til å
+  endre pris.</p>
+  <p>Funksjoner som henter data fra eksterne kilder kan slutte å virke
+  dersom kilden endres eller blir utilgjengelig. Kjernefunksjonen,
+  altså beregning av tidevann, virker uten nett og uten eksterne
+  tjenester.</p>
+
+  <h2>Ansvarsbegrensning</h2>
+  <p>Jeg er ikke ansvarlig for indirekte tap, følgeskader eller tap
+  som skyldes bruk av eller manglende mulighet til å bruke appen, i
+  den utstrekning dette kan begrenses etter norsk rett.</p>
+  <p>Ingenting i disse vilkårene begrenser rettigheter du har som
+  forbruker etter ufravikelig norsk lovgivning.</p>
+
+  <h2>Kjøp i appen</h2>
+  <p>Appen kan inneholde engangskjøp som låser opp tilleggsfunksjoner.
+  Det er ingen abonnement og ingen løpende trekk.</p>
+  <p>Et gjennomført kjøp er knyttet til din Apple-konto og kan
+  gjenopprettes på nye enheter med samme konto.</p>
+
+  <h2>Personvern</h2>
+  <p>Appen samler ikke inn personopplysninger.
+  Se <a href="/floogfjare/personvern/">personvernerklæringen</a>.</p>
+
+  <h2>Endringer</h2>
+  <p>Disse vilkårene kan bli endret. Gjeldende versjon ligger alltid
+  på denne siden, med dato for siste oppdatering.</p>
+
+  <h2>Kontakt</h2>
+  <p>Spørsmål rettes til
+  <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a></p>
+</main>
+
+<footer>
+  © 2026 Daniel Hellenes · <a href="/floogfjare/personvern/">Personvern</a> · <a href="/floogfjare/vilkar/">Vilkår</a><br>
+  Tidevannsdata © Kartverket
+</footer>
+
+</body>
+</html>
