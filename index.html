@@ -37,17 +37,17 @@
     position: relative; overflow: hidden;
     min-height: min(92vh, 780px); min-height: 560px;
     background: linear-gradient(var(--sky-top), var(--sky-bottom));
-    animation: himmel 60s ease-in-out infinite;
   }
-  /* Døgnet går: morgen → dag → kveld → natt → morgen, som paletten i appen. */
-  @keyframes himmel {
-    0%   { background: linear-gradient(#0F4C75, #1B6FA8); }
-    22%  { background: linear-gradient(#2A78B0, #6FB1D8); }
-    45%  { background: linear-gradient(#2E5E8C, #C97A5A); }
-    62%  { background: linear-gradient(#0B1E33, #10314F); }
-    82%  { background: linear-gradient(#0B1E33, #10314F); }
-    100% { background: linear-gradient(#0F4C75, #1B6FA8); }
-  }
+  /* Døgnet går: dag, kveld og natt ligger som lag over morgenhimmelen
+     og tones inn og ut — gradienter kan ikke animeres direkte, de
+     hopper; opacity glir. */
+  .himmel { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+  .himmel-dag   { background: linear-gradient(#2A78B0, #6FB1D8); animation: dag 60s ease-in-out infinite; }
+  .himmel-kveld { background: linear-gradient(#2E5E8C, #C97A5A); animation: kveld 60s ease-in-out infinite; }
+  .himmel-natt  { background: linear-gradient(#0B1E33, #10314F); animation: natt 60s ease-in-out infinite; }
+  @keyframes dag   { 0%,8% { opacity: 0; } 22% { opacity: 1; } 36% { opacity: 1; } 48%,100% { opacity: 0; } }
+  @keyframes kveld { 0%,36% { opacity: 0; } 47% { opacity: 1; } 55% { opacity: 1; } 64%,100% { opacity: 0; } }
+  @keyframes natt  { 0%,55% { opacity: 0; } 64% { opacity: 1; } 84% { opacity: 1; } 96%,100% { opacity: 0; } }
   .sol {
     position: absolute; left: 50%; top: 58%; width: 260px; height: 260px;
     margin-left: -130px; border-radius: 50%; pointer-events: none;
@@ -96,8 +96,9 @@
     position: absolute; z-index: 3; left: 50%; bottom: 13%;
     transform: translateX(-50%);
     padding: 12px 22px; border-radius: 18px; text-align: center;
-    background: var(--glass); border: 1px solid var(--glass-kant);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    /* Ingen backdrop-filter: uskarp bakgrunn over bølger i bevegelse
+       flimret langs kortets kant (Daniels funn 15. sep). Tett glass. */
+    background: rgba(6,42,71,.82); border: 1px solid var(--glass-kant);
     box-shadow: 0 10px 30px rgba(0,0,0,.25);
   }
   .maaler .tall { font-size: 2.2rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
@@ -105,8 +106,11 @@
   .maaler .retning { font-size: .9rem; color: var(--accent); margin-top: 2px; }
 
   /* Sjøen: tre bølgelag, hele sjøen stiger og synker som tidevannet. */
+  /* Sjøen strekker seg under heroens kant (bottom −14 %), så bunnen
+     alltid er mørkt vann uansett hvor tidevannet står — ellers viste
+     kanten seg som en hard strek som fulgte animasjonen. */
   .sjo {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 40%; z-index: 1;
+    position: absolute; left: 0; right: 0; bottom: -14%; height: 56%; z-index: 1;
     animation: tidevann 24s ease-in-out infinite;
   }
   @keyframes tidevann {
@@ -114,13 +118,21 @@
     50%      { transform: translateY(-7%); }
   }
   .sjo .lag { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; overflow: hidden; }
-  .sjo svg { position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; display: block; }
+  .sjo svg {
+    position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; display: block;
+    will-change: transform; backface-visibility: hidden;
+  }
   .lag-bak svg  { animation: driv 30s linear infinite; opacity: .5; }
   .lag-midt svg { animation: driv 22s linear infinite reverse; opacity: .75; }
   .lag-fram svg { animation: driv 16s linear infinite; }
   @keyframes driv { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  /* Bunnen av heroen skal alltid være vann, også når sjøen står lavt. */
+  /* Bunnen av heroen skal alltid være vann, også når sjøen står lavt —
+     og overgangen til siden under tones sømløst over i dypet. */
   .sjo-bunn { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; background: var(--deep); z-index: 0; }
+  .hero::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14%; z-index: 2;
+    background: linear-gradient(rgba(8,36,60,0), var(--deep)); pointer-events: none;
+  }
 
   /* ================= INNHOLD ================= */
   main { max-width: 980px; margin: 0 auto; padding: 0 24px 8px; }
@@ -227,7 +239,7 @@
   .avsl.synlig { opacity: 1; transform: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero, .sol, .sjo, .lag-bak svg, .lag-midt svg, .lag-fram svg, .mini-vann, .puls { animation: none !important; }
+    .himmel, .sol, .sjo, .lag-bak svg, .lag-midt svg, .lag-fram svg, .mini-vann, .puls { animation: none !important; }
     .kurve-linje { stroke-dashoffset: 0; animation: none; }
     .avsl { opacity: 1; transform: none; transition: none; }
     html { scroll-behavior: auto; }
@@ -237,6 +249,9 @@
 <body>
 
 <header class="hero">
+  <div class="himmel himmel-dag" aria-hidden="true"></div>
+  <div class="himmel himmel-kveld" aria-hidden="true"></div>
+  <div class="himmel himmel-natt" aria-hidden="true"></div>
   <div class="sol" aria-hidden="true"></div>
   <div class="horisont" aria-hidden="true"></div>
   <div class="hero-innhold">
@@ -275,7 +290,8 @@
         <defs>
           <linearGradient id="vann" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#2E8FC4"/>
-            <stop offset="1" stop-color="#08243C"/>
+            <stop offset=".6" stop-color="#0D3A5C"/>
+            <stop offset=".85" stop-color="#08243C"/>
           </linearGradient>
         </defs>
         <path d="M0,96 C200,70 380,118 600,94 C820,72 1000,116 1200,96
