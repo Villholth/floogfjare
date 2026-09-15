@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Flo og Fjære – tidevann</title>
-<meta name="description" content="Vannstand akkurat nå — hjemme, på hytta og i båten. Virker uten internett, også uten dekning. Tidevann for hele norskekysten, regnet ut på telefonen.">
+<meta name="description" content="Vannstand akkurat nå — hjemme, på hytta og i båten. Virker uten internett, også uten dekning. Tidevann for hele norskekysten, regnet ut på telefonen. Nå også på iPad.">
 <meta property="og:title" content="Flo og Fjære – tidevann">
 <meta property="og:description" content="Vannstand akkurat nå — hjemme, på hytta og i båten. Virker uten internett, også uten dekning. Tidevann for hele norskekysten, regnet ut på telefonen.">
 <meta property="og:image" content="https://villholth.github.io/floogfjare/og-bilde.png">
 <meta property="og:url" content="https://villholth.github.io/floogfjare/">
 <meta name="apple-itunes-app" content="app-id=6794909612">
+<meta name="theme-color" content="#08243C">
 <link rel="icon" href="/floogfjare/ikon.png">
 <link rel="apple-touch-icon" href="/floogfjare/ikon.png">
 <style>
@@ -18,87 +19,198 @@
     --sky-top: #0F4C75; --sky-bottom: #1B6FA8;
     --water-shallow: #2E8FC4; --water-deep: #062A47;
     --crest: #DDF1FA; --horizon: #7FB8D9; --accent: #8FD8FF;
-    --text: #F4FAFD; --deep: #08243C;
+    --text: #F4FAFD; --deep: #08243C; --deep-soft: #0D3A5C;
+    --glass: rgba(6,42,71,.55); --glass-kant: rgba(244,250,253,.12);
   }
+  html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
     background: var(--deep); color: var(--text);
+    -webkit-font-smoothing: antialiased;
   }
+  a { color: var(--accent); }
+  h2 { font-size: clamp(1.5rem, 4vw, 2rem); letter-spacing: -.02em; font-weight: 800; }
+  .under { margin-top: 10px; opacity: .85; line-height: 1.65; font-size: 1.05rem; }
 
-  /* ---- Hero: himmel, horisont og levende sjø, som i appen ---- */
+  /* ================= HERO: himmel som lever, sjø som stiger ================= */
   .hero {
     position: relative; overflow: hidden;
-    height: min(78vh, 640px); min-height: 460px;
+    min-height: min(92vh, 780px); min-height: 560px;
     background: linear-gradient(var(--sky-top), var(--sky-bottom));
+    animation: himmel 60s ease-in-out infinite;
+  }
+  /* Døgnet går: morgen → dag → kveld → natt → morgen, som paletten i appen. */
+  @keyframes himmel {
+    0%   { background: linear-gradient(#0F4C75, #1B6FA8); }
+    22%  { background: linear-gradient(#2A78B0, #6FB1D8); }
+    45%  { background: linear-gradient(#2E5E8C, #C97A5A); }
+    62%  { background: linear-gradient(#0B1E33, #10314F); }
+    82%  { background: linear-gradient(#0B1E33, #10314F); }
+    100% { background: linear-gradient(#0F4C75, #1B6FA8); }
+  }
+  .sol {
+    position: absolute; left: 50%; top: 58%; width: 260px; height: 260px;
+    margin-left: -130px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,210,94,.55), rgba(255,210,94,0) 60%);
+    filter: blur(6px); animation: solgang 60s ease-in-out infinite;
+  }
+  @keyframes solgang {
+    0%   { transform: translateY(40px); opacity: .5; }
+    22%  { transform: translateY(-160px); opacity: .9; }
+    45%  { transform: translateY(20px); opacity: .8; }
+    55%  { transform: translateY(120px); opacity: 0; }
+    85%  { transform: translateY(120px); opacity: 0; }
+    100% { transform: translateY(40px); opacity: .5; }
   }
   .horisont {
-    position: absolute; left: 0; right: 0; top: 56%; height: 22px;
+    position: absolute; left: 0; right: 0; top: 60%; height: 26px;
     background: radial-gradient(ellipse 55% 120% at 50% 50%,
-                rgba(127,184,217,.5), rgba(127,184,217,0));
-    filter: blur(2px); pointer-events: none;
+                rgba(127,184,217,.55), rgba(127,184,217,0));
+    filter: blur(3px); pointer-events: none;
   }
   .hero-innhold {
-    position: relative; z-index: 2; text-align: center;
-    padding: clamp(40px, 8vh, 76px) 24px 0;
+    position: relative; z-index: 3; text-align: center;
+    padding: clamp(36px, 7vh, 72px) 24px 0;
   }
   .ikon {
     width: 104px; height: 104px; border-radius: 24px;
     box-shadow: 0 12px 36px rgba(0,0,0,.4);
   }
   h1 {
-    margin-top: 18px; font-size: clamp(2rem, 6vw, 2.6rem);
+    margin-top: 18px; font-size: clamp(2.1rem, 6vw, 2.9rem);
     font-weight: 800; letter-spacing: -.02em;
   }
-  .tagline {
-    margin-top: 8px; font-size: clamp(1.05rem, 3vw, 1.25rem); opacity: .9;
+  .tagline { margin-top: 8px; font-size: clamp(1.05rem, 3vw, 1.3rem); opacity: .92; }
+  .nyhet {
+    display: inline-block; margin-top: 14px; padding: 6px 14px; border-radius: 999px;
+    font-size: .88rem; font-weight: 600; letter-spacing: .01em;
+    background: rgba(143,216,255,.16); border: 1px solid rgba(143,216,255,.35);
   }
   /* Apples offisielle merke: aldri modifisert, minst 40 px høyt,
      luft rundt på minst kvart høyde (retningslinjene). */
-  .lastned { display: inline-block; margin-top: 26px; }
+  .lastned { display: inline-block; margin-top: 22px; }
   .lastned img { display: block; height: 52px; width: auto; }
 
-  /* Sjøen: to bølgelag som driver sakte mot hverandre. */
-  .sjo { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; z-index: 1; }
-  .sjo .lag { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; overflow: hidden; }
-  .sjo svg {
-    position: absolute; bottom: 0; left: 0;
-    width: 200%; height: 100%; display: block;
+  /* Den levende vannstanden: et lite glasskort som følger sjøen under. */
+  .maaler {
+    position: absolute; z-index: 3; left: 50%; bottom: 13%;
+    transform: translateX(-50%);
+    padding: 12px 22px; border-radius: 18px; text-align: center;
+    background: var(--glass); border: 1px solid var(--glass-kant);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
   }
-  .lag-bak svg  { animation: driv 26s linear infinite; opacity: .55; }
-  .lag-fram svg { animation: driv 16s linear infinite reverse; }
-  @keyframes driv {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .lag-bak svg, .lag-fram svg { animation: none; }
-  }
+  .maaler .tall { font-size: 2.2rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .maaler .tall small { font-size: 1rem; font-weight: 500; opacity: .8; margin-left: 4px; }
+  .maaler .retning { font-size: .9rem; color: var(--accent); margin-top: 2px; }
 
-  /* ---- Innhold ---- */
-  main { max-width: 680px; margin: 0 auto; padding: 48px 24px 8px; }
+  /* Sjøen: tre bølgelag, hele sjøen stiger og synker som tidevannet. */
+  .sjo {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 40%; z-index: 1;
+    animation: tidevann 24s ease-in-out infinite;
+  }
+  @keyframes tidevann {
+    0%, 100% { transform: translateY(9%); }
+    50%      { transform: translateY(-7%); }
+  }
+  .sjo .lag { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; overflow: hidden; }
+  .sjo svg { position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; display: block; }
+  .lag-bak svg  { animation: driv 30s linear infinite; opacity: .5; }
+  .lag-midt svg { animation: driv 22s linear infinite reverse; opacity: .75; }
+  .lag-fram svg { animation: driv 16s linear infinite; }
+  @keyframes driv { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  /* Bunnen av heroen skal alltid være vann, også når sjøen står lavt. */
+  .sjo-bunn { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; background: var(--deep); z-index: 0; }
+
+  /* ================= INNHOLD ================= */
+  main { max-width: 980px; margin: 0 auto; padding: 0 24px 8px; }
+  section { margin-top: 72px; }
   .ingress {
-    font-size: 1.12rem; line-height: 1.7; text-align: center;
-    max-width: 560px; margin: 0 auto;
+    font-size: clamp(1.15rem, 2.6vw, 1.35rem); line-height: 1.65; text-align: center;
+    max-width: 640px; margin: 56px auto 0;
   }
-  .chips {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    margin: 28px 0 8px;
-  }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 26px 0 0; }
   .chip {
     padding: 8px 16px; border-radius: 999px; font-size: .92rem;
     background: rgba(143,216,255,.12); border: 1px solid rgba(143,216,255,.25);
   }
-  .kort-rad { display: grid; gap: 16px; margin-top: 36px; }
-  @media (min-width: 560px) { .kort-rad { grid-template-columns: 1fr 1fr; } }
+
+  /* Tre tall som sier alt. */
+  .tall-rad { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); margin-top: 32px; }
+  .tall-kort { text-align: center; padding: 18px 10px; border-radius: 18px; background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.08); }
+  .tall-kort b { display: block; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; letter-spacing: -.02em; color: var(--accent); }
+  .tall-kort span { font-size: .88rem; opacity: .8; line-height: 1.4; display: block; margin-top: 4px; }
+
+  /* Slik virker det: tre animerte illustrasjoner. */
+  .tre { display: grid; gap: 18px; margin-top: 28px; }
+  @media (min-width: 720px) { .tre { grid-template-columns: repeat(3, 1fr); } }
+  .forklaring {
+    padding: 22px; border-radius: 22px;
+    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.09);
+  }
+  .forklaring h3 { font-size: 1.12rem; margin: 14px 0 6px; }
+  .forklaring p { line-height: 1.6; opacity: .88; font-size: .97rem; }
+  .ill { width: 100%; height: 150px; border-radius: 16px; overflow: hidden; background: linear-gradient(#0F4C75, #1B6FA8); position: relative; }
+  .ill svg { width: 100%; height: 100%; display: block; }
+  /* 1: vannet stiger i den lille telefonen */
+  .mini-vann { animation: minivann 8s ease-in-out infinite; transform-origin: bottom; }
+  @keyframes minivann { 0%, 100% { transform: translateY(26px); } 50% { transform: translateY(-14px); } }
+  /* 2: markøren glir langs kurven */
+  .kurve-linje { stroke-dasharray: 600; stroke-dashoffset: 600; animation: tegn 3s ease-out forwards; }
+  @keyframes tegn { to { stroke-dashoffset: 0; } }
+  /* 3: flymodus — en rolig puls i haken */
+  .puls { animation: puls 2.4s ease-in-out infinite; transform-origin: center; }
+  @keyframes puls { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.12); opacity: 1; } }
+
+  /* Galleri: skjermbildene i App Store-stil, sveipbart. */
+  .galleri {
+    display: flex; gap: 16px; overflow-x: auto; padding: 8px 4px 18px;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; margin-top: 26px;
+  }
+  .galleri::-webkit-scrollbar { display: none; }
+  .galleri figure { flex: 0 0 auto; width: min(76vw, 300px); scroll-snap-align: center; margin: 0; }
+  .galleri img { width: 100%; height: auto; display: block; border-radius: 22px; box-shadow: 0 18px 44px rgba(0,0,0,.4); }
+  .galleri figcaption { text-align: center; font-size: .9rem; opacity: .75; margin-top: 10px; }
+
+  /* Nytt: iPad og kart. */
+  .nytt { display: grid; gap: 28px; align-items: center; margin-top: 28px; }
+  @media (min-width: 820px) { .nytt { grid-template-columns: 1.15fr 1fr; } .nytt.speil > :first-child { order: 2; } }
+  .ramme { border-radius: 22px; padding: 10px; background: #0b1826; border: 1px solid rgba(244,250,253,.12); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+  .ramme img { width: 100%; height: auto; display: block; border-radius: 14px; }
+  .ramme.ipad { padding: 14px; border-radius: 28px; }
+  .ramme.ipad img { border-radius: 16px; }
+  .nytt h3 { font-size: 1.4rem; letter-spacing: -.01em; margin-bottom: 8px; }
+  .nytt p { line-height: 1.7; opacity: .9; }
+  .nytt ul { margin: 12px 0 0 18px; line-height: 1.7; opacity: .9; }
+
+  /* Funksjoner. */
+  .funk { display: grid; gap: 14px; margin-top: 26px; }
+  @media (min-width: 560px) { .funk { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) { .funk { grid-template-columns: repeat(3, 1fr); } }
+  .f {
+    padding: 20px; border-radius: 20px;
+    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.09);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .f:hover { transform: translateY(-3px); background: rgba(244,250,253,.08); }
+  .f .sym { font-size: 1.5rem; }
+  .f h3 { font-size: 1.05rem; margin: 10px 0 4px; }
+  .f p { line-height: 1.55; opacity: .86; font-size: .95rem; }
+  .pro { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; background: rgba(143,216,255,.18); color: var(--accent); vertical-align: middle; }
+  .pro-merknad { margin-top: 16px; font-size: .92rem; opacity: .75; text-align: center; line-height: 1.6; }
+
+  /* Om / support. */
+  .kort-rad { display: grid; gap: 16px; margin-top: 26px; }
+  @media (min-width: 720px) { .kort-rad { grid-template-columns: repeat(3, 1fr); } }
   .kort {
     padding: 24px; border-radius: 20px;
-    background: rgba(244,250,253,.06);
-    border: 1px solid rgba(244,250,253,.10);
+    background: rgba(244,250,253,.06); border: 1px solid rgba(244,250,253,.10);
     transition: transform .15s ease, background .15s ease;
   }
   .kort:hover { transform: translateY(-2px); background: rgba(244,250,253,.09); }
   .kort .emoji { font-size: 1.6rem; }
-  .kort h2 { font-size: 1.1rem; margin: 10px 0 6px; }
+  .kort h3 { font-size: 1.1rem; margin: 10px 0 6px; }
   .kort p { line-height: 1.6; opacity: .9; font-size: .97rem; }
   .kort a.knapp {
     display: inline-block; margin-top: 14px; padding: 10px 18px;
@@ -106,41 +218,56 @@
     font-weight: 600; text-decoration: none; font-size: .95rem;
   }
   .kort a.knapp:hover { filter: brightness(1.08); }
-  a { color: var(--accent); }
-  .avsnitt { margin-top: 36px; }
-  .avsnitt h2 { font-size: 1.15rem; margin-bottom: 8px; }
-  .avsnitt p { line-height: 1.7; opacity: .92; }
-  .merknad {
-    margin-top: 36px; text-align: center; font-size: .88rem;
-    opacity: .6; line-height: 1.6;
-  }
-  footer {
-    text-align: center; padding: 26px 24px 40px; font-size: .85rem;
-    opacity: .65; line-height: 1.7;
-  }
+  .merknad { margin-top: 44px; text-align: center; font-size: .88rem; opacity: .6; line-height: 1.6; }
+  footer { text-align: center; padding: 26px 24px 44px; font-size: .85rem; opacity: .65; line-height: 1.7; }
   footer a { color: inherit; }
+
+  /* Avsløring ved scrolling. */
+  .avsl { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .avsl.synlig { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero, .sol, .sjo, .lag-bak svg, .lag-midt svg, .lag-fram svg, .mini-vann, .puls { animation: none !important; }
+    .kurve-linje { stroke-dashoffset: 0; animation: none; }
+    .avsl { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
 
 <header class="hero">
+  <div class="sol" aria-hidden="true"></div>
   <div class="horisont" aria-hidden="true"></div>
   <div class="hero-innhold">
     <img class="ikon" src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet">
     <h1>Flo og Fjære</h1>
     <p class="tagline">Vannstand akkurat nå&nbsp;— uten internett</p>
+    <div><span class="nyhet">Nå også på iPad</span></div>
     <a class="lastned" href="https://apps.apple.com/no/app/id6794909612">
       <img src="/floogfjare/appstore-merke.svg" alt="Last ned i App Store">
     </a>
   </div>
+
+  <div class="maaler" aria-hidden="true">
+    <div class="tall"><span id="cm">84</span><small>cm</small></div>
+    <div class="retning" id="retning">↗ Stigende sjø</div>
+  </div>
+
+  <div class="sjo-bunn" aria-hidden="true"></div>
   <div class="sjo" aria-hidden="true">
     <div class="lag lag-bak">
       <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
-        <!-- To identiske halvdeler (0–1200 og 1200–2400) gir sømløs loop. -->
         <path d="M0,70 C150,50 300,94 600,72 C900,50 1050,94 1200,70
                  C1350,50 1500,94 1800,72 C2100,50 2250,94 2400,70
-                 L2400,240 L0,240 Z"
-              fill="#7FB8D9"/>
+                 L2400,240 L0,240 Z" fill="#7FB8D9"/>
+      </svg>
+    </div>
+    <div class="lag lag-midt">
+      <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
+        <path d="M0,84 C180,62 360,104 600,82 C840,60 1020,104 1200,84
+                 C1380,62 1560,104 1800,82 C2040,60 2220,104 2400,84
+                 L2400,240 L0,240 Z" fill="#3E9AD0"/>
       </svg>
     </div>
     <div class="lag lag-fram">
@@ -151,12 +278,11 @@
             <stop offset="1" stop-color="#08243C"/>
           </linearGradient>
         </defs>
-        <!-- Samme prinsipp: halvdel to er halvdel én forskjøvet 1200. -->
-        <path d="M0,90 C200,64 380,112 600,88 C820,66 1000,110 1200,90
-                 C1400,64 1580,112 1800,88 C2020,66 2200,110 2400,90
+        <path d="M0,96 C200,70 380,118 600,94 C820,72 1000,116 1200,96
+                 C1400,70 1580,118 1800,94 C2020,72 2200,116 2400,96
                  L2400,240 L0,240 Z" fill="url(#vann)"/>
-        <path d="M0,90 C200,64 380,112 600,88 C820,66 1000,110 1200,90
-                 C1400,64 1580,112 1800,88 C2020,66 2200,110 2400,90"
+        <path d="M0,96 C200,70 380,118 600,94 C820,72 1000,116 1200,96
+                 C1400,70 1580,118 1800,94 C2020,72 2200,116 2400,96"
               fill="none" stroke="#DDF1FA" stroke-width="5" stroke-linecap="round"/>
       </svg>
     </div>
@@ -164,68 +290,203 @@
 </header>
 
 <main>
-  <p class="ingress"><strong>Vannet er skjermen.</strong> Flo og Fjære
-  viser vannstanden som en levende sjø: stiger vannet på
-  skjermen, stiger det i fjæra. Du trenger ikke lese et eneste tall —
-  men de står der når du vil ha dem.</p>
+  <p class="ingress avsl"><strong>Vannet er skjermen.</strong> Flo og Fjære
+  viser vannstanden som en levende sjø: stiger vannet på skjermen,
+  stiger det i fjæra. Du trenger ikke lese et eneste tall — men de
+  står der når du vil ha dem.</p>
 
-  <div class="chips">
+  <div class="chips avsl">
     <span class="chip"><span aria-hidden="true">✈️</span> Virker uten internett og dekning</span>
-    <span class="chip"><span aria-hidden="true">🌊</span> 4 372 punkter langs kysten</span>
     <span class="chip"><span aria-hidden="true">🗺️</span> Data fra Kartverket</span>
     <span class="chip"><span aria-hidden="true">🔒</span> Samler ingen data</span>
-    <span class="chip"><span aria-hidden="true">⚙️</span> Regnes ut på telefonen</span>
+    <span class="chip"><span aria-hidden="true">📱</span> iPhone og iPad</span>
   </div>
 
-  <section class="avsnitt">
-    <h2>Regnet ut, ikke hentet ned</h2>
-    <p>De fleste tidevannsapper laster ned en ferdig tabell. Flo og
-    Fjære har i stedet en matematisk modell av hvordan månen og sola
-    drar i havet langs norskekysten, og regner ut vannstanden selv.
-    Derfor svarer appen med én gang, også i flymodus.</p>
+  <div class="tall-rad avsl">
+    <div class="tall-kort"><b>4 372</b><span>kystpunkter fra svenskegrensa til Svalbard</span></div>
+    <div class="tall-kort"><b>&lt; 2 min</b><span>avvik fra Kartverkets tabeller for høyvann og lavvann</span></div>
+    <div class="tall-kort"><b>0</b><span>data samlet inn. Posisjonen din blir på telefonen</span></div>
+  </div>
+
+  <!-- ================= SLIK VIRKER DET ================= -->
+  <section class="avsl">
+    <h2>Slik virker det</h2>
+    <div class="tre">
+      <div class="forklaring">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 300 150">
+            <rect x="105" y="10" width="90" height="170" rx="16" fill="#0b1826" stroke="rgba(244,250,253,.25)"/>
+            <clipPath id="skjerm"><rect x="112" y="18" width="76" height="140" rx="10"/></clipPath>
+            <g clip-path="url(#skjerm)">
+              <rect x="112" y="18" width="76" height="140" fill="#1B6FA8"/>
+              <g class="mini-vann">
+                <path d="M100,80 C120,72 135,88 150,80 C165,72 180,88 200,80 L200,200 L100,200 Z" fill="#2E8FC4"/>
+                <path d="M100,80 C120,72 135,88 150,80 C165,72 180,88 200,80" fill="none" stroke="#DDF1FA" stroke-width="2"/>
+              </g>
+              <text x="150" y="52" text-anchor="middle" fill="#F4FAFD" font-size="20" font-weight="800">91</text>
+              <text x="150" y="64" text-anchor="middle" fill="#F4FAFD" font-size="7" opacity=".8">over laveste fjære</text>
+            </g>
+          </svg>
+        </div>
+        <h3>Vannet er skjermen</h3>
+        <p>Sjøen på skjermen stiger og synker i takt med den ekte. Himmelen følger sola der du er, fra morgen til natt.</p>
+      </div>
+      <div class="forklaring">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 300 150">
+            <path id="bane" class="kurve-linje" d="M20,95 C50,40 80,40 110,95 C140,150 170,150 200,95 C230,40 260,40 290,95"
+                  fill="none" stroke="#DDF1FA" stroke-width="3" stroke-linecap="round"/>
+            <path d="M20,95 C50,40 80,40 110,95 C140,150 170,150 200,95 C230,40 260,40 290,95 L290,150 L20,150 Z" fill="rgba(221,241,250,.12)"/>
+            <circle r="7" fill="#8FD8FF">
+              <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear">
+                <mpath href="#bane"/>
+              </animateMotion>
+            </circle>
+            <text x="150" y="28" text-anchor="middle" fill="#F4FAFD" font-size="11" opacity=".85">dra fingeren — se fram og tilbake i tid</text>
+          </svg>
+        </div>
+        <h3>Dra i tiden</h3>
+        <p>Legg fingeren på kurven og spol i døgnet: vannet, lyset og tallet følger med. Slipp, og sjøen glir tilbake til nå.</p>
+      </div>
+      <div class="forklaring">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 300 150">
+            <text x="150" y="70" text-anchor="middle" font-size="46">✈️</text>
+            <g class="puls">
+              <circle cx="205" cy="52" r="16" fill="#8FD8FF"/>
+              <path d="M197,52 l6,6 l11,-12" fill="none" stroke="#08243C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <text x="150" y="118" text-anchor="middle" fill="#F4FAFD" font-size="12" opacity=".9">regnet ut på telefonen — også i flymodus</text>
+          </svg>
+        </div>
+        <h3>Uten internett</h3>
+        <p>Appen har en matematisk modell av hvordan månen og sola drar i havet, og regner ut vannstanden selv. Derfor svarer den med én gang, også der det ikke er dekning.</p>
+      </div>
+    </div>
   </section>
 
-  <section class="avsnitt">
+  <!-- ================= GALLERI ================= -->
+  <section class="avsl">
+    <h2>Se den i bruk</h2>
+    <p class="under">Sveip gjennom skjermbildene.</p>
+    <div class="galleri">
+      <figure><img src="/floogfjare/bilder/iphone-01-hero.jpg" alt="Hovedskjermen: vannstanden som en levende sjø" loading="lazy"><figcaption>Den levende sjøen</figcaption></figure>
+      <figure><img src="/floogfjare/bilder/iphone-02-kysten.jpg" alt="Stedsvelgeren med søk langs hele kysten" loading="lazy"><figcaption>Hele kysten</figcaption></figure>
+      <figure><img src="/floogfjare/bilder/iphone-03-kurve.jpg" alt="Kurve for flere døgn med høyvann og lavvann" loading="lazy"><figcaption>Fram og tilbake i tid</figcaption></figure>
+      <figure><img src="/floogfjare/bilder/iphone-04-fjaeretur.jpg" alt="Fjæretur-planleggeren" loading="lazy"><figcaption>Fjæretur-planleggeren</figcaption></figure>
+      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-kart.jpg" alt="Kartet i stedsvelgeren med kystpunkter" loading="lazy"></div><figcaption>Velg på kartet</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- ================= NYTT ================= -->
+  <section class="avsl">
+    <h2>Nytt: like hjemme på iPad</h2>
+    <div class="nytt">
+      <div class="ramme ipad"><img src="/floogfjare/bilder/ipad-hjem.jpg" alt="Flo og Fjære på iPad: den levende sjøen med to døgns kurve og moduler for sol, måne og steder" loading="lazy"></div>
+      <div>
+        <h3>Det store lerretet</h3>
+        <p>På iPad fyller sjøen hele skjermen. Nederst ligger to døgn med kurve og merkelapp på hvert høyvann og lavvann, og til høyre små moduler for soloppgang og solnedgang, månefase og favorittstedene dine.</p>
+        <ul>
+          <li>Alle retninger, også delt skjerm</li>
+          <li>Samme skrubbing i tid som på telefonen</li>
+          <li>Widgets på hjemskjermen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nytt speil" style="margin-top:44px">
+      <div class="ramme ipad"><img src="/floogfjare/bilder/ipad-kart.jpg" alt="Kartvelgeren: kystpunktene som klynger med tall, og et valgt punkt med Velg-knapp" loading="lazy"></div>
+      <div>
+        <h3>Velg sted rett fra kartet</h3>
+        <p>Alle kystpunktene ligger på et kart. Zoomet ut ser du dem som bobler med tall; zoom inn, eller trykk på kysten, så velger appen nærmeste punkt for deg. Søket og favorittene finnes fortsatt, kartet er bare én vei til.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FUNKSJONER ================= -->
+  <section class="avsl">
+    <h2>Alt du får</h2>
+    <div class="funk">
+      <div class="f"><div class="sym" aria-hidden="true">🌊</div><h3>Den levende sjøen</h3><p>Vannstand, retning og springflo-merking. Sjøen stiger og synker som den ekte.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">📈</div><h3>Kurve for 1 og 3 døgn</h3><p>Høyvann og lavvann med klokkeslett og høyde, dra i tiden med fingeren.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">📍</div><h3>Steder</h3><p>Søk langs hele kysten, velg på kartet, bruk posisjonen din, lagre én favoritt.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">🔲</div><h3>Widgets og låseskjerm</h3><p>Vannstanden på hjemskjermen og en måler på låseskjermen.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">🌗</div><h3>Sol og måne</h3><p>Soloppgang, solnedgang og månefasen som driver springflo og nippflo.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">🏖️</div><h3>Fjæretur-planleggeren <span class="pro">Pro</span></h3><p>Lave fjærer i dagslys, uker og måneder fram. Søk etter helg, dagslys og klokkevindu.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">🔔</div><h3>Varsler <span class="pro">Pro</span></h3><p>Beskjed før høyvann og lavvann, og når sjøen krysser et nivå du velger.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">📅</div><h3>Kurver til 30 døgn <span class="pro">Pro</span></h3><p>Hele måneden med springflo og nippflo, og springflokalenderen.</p></div>
+      <div class="f"><div class="sym" aria-hidden="true">⭐</div><h3>Flere favoritter <span class="pro">Pro</span></h3><p>Så mange steder du vil, og sammenlign dem i én oversikt. Nedtelling på låseskjermen.</p></div>
+    </div>
+    <p class="pro-merknad">Flo og Fjære Pro er et valgfritt engangskjøp. Ingen abonnement, ingen konto. Kjernen er og forblir gratis.</p>
+  </section>
+
+  <!-- ================= OM / SUPPORT ================= -->
+  <section class="avsl">
     <h2>Testet mot fasit</h2>
-    <p>Beregningene er kontrollert mot Kartverkets offisielle
-    tidevannstabeller for ti havner fra Oslo til Ny-Ålesund.
-    Tidspunktene for høyvann og lavvann stemmer på under to
-    minutter.</p>
+    <p class="under">Beregningene er kontrollert mot Kartverkets offisielle tidevannstabeller for havner fra Oslo til Ny-Ålesund. Tidspunktene for høyvann og lavvann stemmer på under to minutter. Høydene er astronomisk prediksjon: vær kan gi avvik, særlig ved stormflo.</p>
+    <div class="kort-rad">
+      <div class="kort">
+        <span class="emoji" aria-hidden="true">💬</span>
+        <h3>Support</h3>
+        <p>Spørsmål, feilrapporter eller forslag? Alle henvendelser leses og besvares.</p>
+        <a class="knapp" href="mailto:danielhellenes@me.com">Send e-post</a>
+      </div>
+      <div class="kort">
+        <span class="emoji" aria-hidden="true">🔒</span>
+        <h3>Personvern</h3>
+        <p>Appen samler ikke inn noen data. Alt beregnes lokalt på telefonen — også posisjonen din blir der.</p>
+        <a class="knapp" href="/floogfjare/personvern/">Les erklæringen</a>
+      </div>
+      <div class="kort">
+        <span class="emoji" aria-hidden="true">👤</span>
+        <h3>Om prosjektet</h3>
+        <p>Flo og Fjære er laget av én person på fritiden. Alle henvendelser leses og besvares, men feilretting skjer når jeg har tid, og jeg lover ingen tidsfrister.</p>
+      </div>
+    </div>
   </section>
 
-  <div class="kort-rad">
-    <div class="kort">
-      <span class="emoji" aria-hidden="true">💬</span>
-      <h2>Support</h2>
-      <p>Spørsmål, feilrapporter eller forslag? Alle henvendelser
-      leses og besvares.</p>
-      <a class="knapp" href="mailto:danielhellenes@me.com">Send e-post</a>
-    </div>
-    <div class="kort">
-      <span class="emoji" aria-hidden="true">🔒</span>
-      <h2>Personvern</h2>
-      <p>Appen samler ikke inn noen data. Alt beregnes lokalt på
-      telefonen — også posisjonen din blir der.</p>
-      <a class="knapp" href="/floogfjare/personvern/">Les erklæringen</a>
-    </div>
-    <div class="kort">
-      <span class="emoji" aria-hidden="true">👤</span>
-      <h2>Om prosjektet</h2>
-      <p>Flo og Fjære er laget av én person på fritiden. Alle
-      henvendelser leses og besvares, men feilretting skjer når jeg
-      har tid, og jeg lover ingen tidsfrister.</p>
-    </div>
-  </div>
-
-  <p class="merknad">Tidevannsdata fra Kartverket, Sjødivisjonen.
-  Høydene er astronomisk prediksjon — vær kan gi avvik, særlig ved
-  stormflo. Ikke til navigasjon.</p>
+  <p class="merknad">Tidevannsdata fra Kartverket, Sjødivisjonen — prediksjonene er et bearbeidet verk og regnes ut på telefonen. Appen er utviklet uavhengig av Kartverket. Ikke til navigasjon.</p>
 </main>
 
 <footer>
   © 2026 Daniel Hellenes · <a href="/floogfjare/personvern/">Personvern</a> · <a href="/floogfjare/vilkar/">Vilkår</a><br>
   Tidevannsdata © Kartverket
 </footer>
+
+<script>
+  // Den levende vannstanden i heroen følger sjøens tidevannsanimasjon
+  // (24 s per syklus), så tallet og bølgene stiger sammen.
+  (function () {
+    var cm = document.getElementById('cm');
+    var retning = document.getElementById('retning');
+    var redusert = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (redusert) { return; }
+    var start = performance.now();
+    function tikk(naa) {
+      var t = ((naa - start) / 24000) * 2 * Math.PI;
+      var niva = Math.round(84 + 40 * Math.sin(t + Math.PI));
+      var stiger = Math.cos(t + Math.PI) > 0;
+      cm.textContent = niva;
+      retning.textContent = stiger ? '↗ Stigende sjø' : '↘ Fallende sjø';
+      requestAnimationFrame(tikk);
+    }
+    requestAnimationFrame(tikk);
+  })();
+
+  // Innholdet avsløres når det scroller inn.
+  (function () {
+    var elementer = document.querySelectorAll('.avsl');
+    if (!('IntersectionObserver' in window)) {
+      elementer.forEach(function (e) { e.classList.add('synlig'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (poster) {
+      poster.forEach(function (p) {
+        if (p.isIntersecting) { p.target.classList.add('synlig'); obs.unobserve(p.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    elementer.forEach(function (e) { obs.observe(e); });
+  })();
+</script>
 
 </body>
 </html>
