@@ -148,10 +148,21 @@
   }
 
   /* Tre tall som sier alt. */
-  .tall-rad { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); margin-top: 32px; }
-  .tall-kort { text-align: center; padding: 18px 10px; border-radius: 18px; background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.08); }
-  .tall-kort b { display: block; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; letter-spacing: -.02em; color: var(--accent); }
-  .tall-kort span { font-size: .88rem; opacity: .8; line-height: 1.4; display: block; margin-top: 4px; }
+  /* Mobil først: rader med tallet til venstre; tre kolonner fra 560 px. */
+  .tall-rad { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 32px; }
+  .tall-kort {
+    display: flex; align-items: center; gap: 16px; text-align: left;
+    padding: 14px 18px; border-radius: 18px;
+    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.08);
+  }
+  .tall-kort b { flex: 0 0 96px; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; letter-spacing: -.02em; color: var(--accent); }
+  .tall-kort span { font-size: .92rem; opacity: .8; line-height: 1.45; }
+  @media (min-width: 560px) {
+    .tall-rad { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .tall-kort { display: block; text-align: center; padding: 18px 10px; }
+    .tall-kort b { display: block; }
+    .tall-kort span { display: block; margin-top: 4px; }
+  }
 
   /* Slik virker det: tre animerte illustrasjoner. */
   .tre { display: grid; gap: 18px; margin-top: 28px; }
@@ -258,7 +269,7 @@
     <img class="ikon" src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet">
     <h1>Flo og Fjære</h1>
     <p class="tagline">Vannstand akkurat nå&nbsp;— uten internett</p>
-    <div><span class="nyhet">Nå også på iPad</span></div>
+    <div><span class="nyhet">Tilgjengelig på iPhone og iPad</span></div>
     <a class="lastned" href="https://apps.apple.com/no/app/id6794909612">
       <img src="/floogfjare/appstore-merke.svg" alt="Last ned i App Store">
     </a>
@@ -315,7 +326,7 @@
     <span class="chip"><span aria-hidden="true">✈️</span> Virker uten internett og dekning</span>
     <span class="chip"><span aria-hidden="true">🗺️</span> Data fra Kartverket</span>
     <span class="chip"><span aria-hidden="true">🔒</span> Samler ingen data</span>
-    <span class="chip"><span aria-hidden="true">📱</span> iPhone og iPad</span>
+    <span class="chip"><span aria-hidden="true">🌗</span> Sol, måne og springflo</span>
   </div>
 
   <div class="tall-rad avsl">
