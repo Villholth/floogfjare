@@ -2,7 +2,7 @@
 <html lang="nb">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Personvern — Flo og Fjære</title>
 <meta name="description" content="Flo og Fjære samler ikke inn noen data. Alt beregnes lokalt på telefonen — personvernerklæringen for appen.">
 <meta property="og:title" content="Personvern — Flo og Fjære">
@@ -10,161 +10,113 @@
 <meta property="og:image" content="https://villholth.github.io/floogfjare/og-bilde.png">
 <meta property="og:url" content="https://villholth.github.io/floogfjare/personvern/">
 <meta name="apple-itunes-app" content="app-id=6794909612">
+<meta name="theme-color" content="#08243C">
 <link rel="icon" href="/floogfjare/ikon.png">
 <link rel="apple-touch-icon" href="/floogfjare/ikon.png">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --sky-top: #0F4C75; --sky-bottom: #1B6FA8;
-    --crest: #DDF1FA; --accent: #8FD8FF;
-    --text: #F4FAFD; --deep: #08243C;
-  }
-  body {
-    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-    background: var(--deep); color: var(--text); line-height: 1.65;
-  }
-  .hero {
-    position: relative; overflow: hidden; min-height: 240px;
-    background: linear-gradient(var(--sky-top), var(--sky-bottom));
-    text-align: center;
-  }
-  .hero-innhold { position: relative; z-index: 2; padding: 44px 24px 100px; }
-  .hero img { width: 56px; height: 56px; border-radius: 13px;
-              box-shadow: 0 6px 18px rgba(0,0,0,.35); }
-  h1 { font-size: 1.45rem; font-weight: 800; margin-top: 10px; }
-  .dato { opacity: .75; font-size: .88rem; margin-top: 4px; }
-  .sjo { position: absolute; left: 0; right: 0; bottom: 0; height: 64px;
-         z-index: 1; overflow: hidden; }
-  .sjo svg { position: absolute; bottom: 0; left: 0; width: 200%;
-             height: 100%; display: block;
-             animation: driv 18s linear infinite; }
-  @keyframes driv { from { transform: translateX(0); }
-                    to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) { .sjo svg { animation: none; } }
-
-  main { max-width: 620px; margin: 0 auto; padding: 32px 24px 56px; }
-  .tilbake {
-    display: inline-block; margin-bottom: 20px; padding: 8px 16px;
-    border-radius: 999px; font-size: .9rem; text-decoration: none;
-    color: var(--text); background: rgba(143,216,255,.12);
-    border: 1px solid rgba(143,216,255,.25);
-  }
-  .kortversjon {
-    padding: 20px 24px; border-radius: 18px; font-size: 1.05rem;
-    background: rgba(143,216,255,.10);
-    border: 1px solid rgba(143,216,255,.25);
-  }
-  h2 { font-size: 1.12rem; margin: 30px 0 8px; }
-  p + p { margin-top: 12px; }
-  ul { margin: 10px 0 10px 22px; }
-  li { margin-top: 5px; }
-  a { color: var(--accent); }
-  hr { border: none; border-top: 1px solid rgba(244,250,253,.15); margin: 38px 0; }
-  .en { opacity: .85; font-size: .95rem; }
-  .en h2 { margin-top: 0; }
-  footer {
-    text-align: center; padding: 26px 24px 40px; font-size: .85rem;
-    opacity: .65; line-height: 1.7;
-  }
-  footer a { color: inherit; }
-</style>
+<link rel="stylesheet" href="/floogfjare/felles.css">
 </head>
 <body>
+<a class="hopp" href="#innhold">Hopp til innholdet</a>
 
-<header class="hero">
-  <div class="hero-innhold">
-    <a href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet"></a>
-    <h1>Personvern</h1>
-    <p class="dato">Flo og Fjære · Sist oppdatert 26. juli 2026</p>
+<header class="side-hode">
+  <canvas aria-hidden="true"></canvas>
+  <div class="topp">
+    <a class="merke" href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="" width="30" height="30">Flo og Fjære</a>
+    <nav aria-label="Snarveier">
+      <a class="kan-skjules" href="/floogfjare/">Forsiden</a>
+      <a href="/floogfjare/vilkar/">Vilkår</a>
+    </nav>
   </div>
-  <div class="sjo" aria-hidden="true">
-    <svg viewBox="0 0 2400 100" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="vann" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#2E8FC4"/>
-          <stop offset="1" stop-color="#08243C"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
-               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38
-               L2400,100 L0,100 Z" fill="url(#vann)"/>
-      <path d="M0,38 C200,24 380,52 600,38 C820,26 1000,50 1200,38
-               C1400,24 1580,52 1800,38 C2020,26 2200,50 2400,38"
-            fill="none" stroke="#DDF1FA" stroke-width="4" stroke-linecap="round"/>
-    </svg>
+  <div class="bredde">
+    <p class="overline">Flo og Fjære</p>
+    <h1>Personvern</h1>
+    <p class="dato">Sist oppdatert 26. juli 2026</p>
   </div>
 </header>
 
-<main>
-  <a class="tilbake" href="/floogfjare/">← Til forsiden</a>
+<main id="innhold" class="bredde juss">
+  <aside class="innhold-liste" aria-label="Innhold">
+    <nav>
+      <ol>
+        <li><a href="#data">Hva appen gjør med data</a></li>
+        <li><a href="#ikke">Hva appen ikke gjør</a></li>
+        <li><a href="#rettigheter">Dine rettigheter</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#english">English summary</a></li>
+      </ol>
+    </nav>
+  </aside>
 
-  <div class="kortversjon">
-    <strong>Kort versjon:</strong> Flo og Fjære samler ikke inn noen
-    data om deg. Alt appen gjør, skjer lokalt på telefonen din.
-  </div>
+  <article class="tekst">
+    <p class="kort"><strong>Kort versjon:</strong> Flo og Fjære samler ikke inn noen data om deg. Alt appen gjør, skjer lokalt på telefonen din.</p>
 
-  <h2>Hva appen gjør med data</h2>
-  <p><strong>Posisjon.</strong> Hvis du gir appen tilgang til posisjon,
-  brukes den til én ting: å finne det nærmeste kystpunktet så appen kan
-  vise vannstanden der du er. Posisjonen behandles kun på telefonen og
-  sendes aldri til oss eller noen andre. Du kan når som helst si nei
-  til posisjonstilgang og i stedet velge sted manuelt — appen virker
-  like godt da.</p>
-  <p><strong>Stedssøk.</strong> Når du søker etter et sted, sendes
-  søketeksten til Apples karttjeneste (MapKit) for å finne stedsnavn.
-  Dette er samme tjeneste som Apples egen Kart-app bruker, og søket er
-  underlagt <a href="https://www.apple.com/legal/privacy/">Apples
-  personvernerklæring</a>. Vi mottar ingenting.</p>
-  <p><strong>Favoritter og innstillinger.</strong> Steder du lagrer og
-  valg du gjør (enhet, referansenivå, animasjoner, varsler) lagres kun
-  lokalt på telefonen. Sletter du appen, slettes alt.</p>
-  <p><strong>Varsler.</strong> Varsler før høy- og lavvann beregnes og
-  planlegges lokalt på telefonen. Ingen servere er involvert — varslene
-  virker i flymodus.</p>
-  <p><strong>Tidevannsberegningen.</strong> Hele beregningen skjer på
-  telefonen, fra innebygde harmoniske konstanter avledet fra data fra
-  Kartverket, Sjødivisjonen. Appen trenger ikke og bruker ikke nettverk
-  til dette.</p>
+    <section id="data" aria-labelledby="h-data">
+      <h2 id="h-data"><span class="nr">01</span>Hva appen gjør med data</h2>
+      <p><strong>Posisjon.</strong> Hvis du gir appen tilgang til posisjon, brukes den til én ting: å finne det nærmeste kystpunktet så appen kan vise vannstanden der du er. Posisjonen behandles kun på telefonen og sendes aldri til oss eller noen andre. Du kan når som helst si nei til posisjonstilgang og i stedet velge sted manuelt — appen virker like godt da.</p>
+      <p><strong>Stedssøk.</strong> Når du søker etter et sted, sendes søketeksten til Apples karttjeneste (MapKit) for å finne stedsnavn. Dette er samme tjeneste som Apples egen Kart-app bruker, og søket er underlagt <a href="https://www.apple.com/legal/privacy/">Apples personvernerklæring</a>. Vi mottar ingenting.</p>
+      <p><strong>Favoritter og innstillinger.</strong> Steder du lagrer og valg du gjør (enhet, referansenivå, animasjoner, varsler) lagres kun lokalt på telefonen. Sletter du appen, slettes alt.</p>
+      <p><strong>Varsler.</strong> Varsler før høy- og lavvann beregnes og planlegges lokalt på telefonen. Ingen servere er involvert — varslene virker i flymodus.</p>
+      <p><strong>Tidevannsberegningen.</strong> Hele beregningen skjer på telefonen, fra innebygde harmoniske konstanter avledet fra data fra Kartverket, Sjødivisjonen. Appen trenger ikke og bruker ikke nettverk til dette.</p>
+    </section>
 
-  <h2>Hva appen ikke gjør</h2>
-  <ul>
-    <li>Ingen innsamling av personopplysninger</li>
-    <li>Ingen sporing, ingen annonser, ingen analyse-verktøy</li>
-    <li>Ingen tredjeparts-SDK-er</li>
-    <li>Ingen kontoer eller innlogging</li>
-    <li>Ingen deling av data med noen</li>
-  </ul>
+    <section id="ikke" aria-labelledby="h-ikke">
+      <h2 id="h-ikke"><span class="nr">02</span>Hva appen ikke gjør</h2>
+      <ul>
+        <li>Ingen innsamling av personopplysninger</li>
+        <li>Ingen sporing, ingen annonser, ingen analyse-verktøy</li>
+        <li>Ingen tredjeparts-SDK-er</li>
+        <li>Ingen kontoer eller innlogging</li>
+        <li>Ingen deling av data med noen</li>
+      </ul>
+    </section>
 
-  <h2>Dine rettigheter</h2>
-  <p>Siden vi ikke samler inn noen data om deg, finnes det ingenting
-  hos oss å be om innsyn i, rette eller slette. Alle data appen bruker
-  ligger på din egen telefon og er under din kontroll (GDPR,
-  personopplysningsloven).</p>
+    <section id="rettigheter" aria-labelledby="h-rett">
+      <h2 id="h-rett"><span class="nr">03</span>Dine rettigheter</h2>
+      <p>Siden vi ikke samler inn noen data om deg, finnes det ingenting hos oss å be om innsyn i, rette eller slette. Alle data appen bruker ligger på din egen telefon og er under din kontroll (GDPR, personopplysningsloven).</p>
+    </section>
 
-  <h2>Kontakt</h2>
-  <p>Spørsmål om personvern i Flo og Fjære kan sendes til
-  <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a>.</p>
+    <section id="kontakt" aria-labelledby="h-kontakt">
+      <h2 id="h-kontakt"><span class="nr">04</span>Kontakt</h2>
+      <p>Spørsmål om personvern i Flo og Fjære kan sendes til <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a>.</p>
+    </section>
 
-  <hr>
+    <section id="english" class="engelsk" lang="en" aria-labelledby="h-en">
+      <h2 id="h-en"><span class="nr">05</span>Privacy Policy (English summary)</h2>
+      <p>Flo og Fjære does not collect any data. All tide calculations happen on your device from bundled harmonic constants (data from the Norwegian Mapping Authority). Location, if granted, is used only on-device to find the nearest coastal point and never leaves your phone. Place search queries are sent to Apple's MapKit service (covered by Apple's privacy policy); we receive nothing. Favorites and settings are stored locally and deleted with the app. No tracking, no ads, no analytics, no third-party SDKs, no accounts.</p>
+      <p>Contact: <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a></p>
+    </section>
 
-  <div class="en">
-    <h2>Privacy Policy (English summary)</h2>
-    <p>Flo og Fjære does not collect any data. All tide calculations
-    happen on your device from bundled harmonic constants (data from
-    the Norwegian Mapping Authority). Location, if granted, is used
-    only on-device to find the nearest coastal point and never leaves
-    your phone. Place search queries are sent to Apple's MapKit service
-    (covered by Apple's privacy policy); we receive nothing. Favorites
-    and settings are stored locally and deleted with the app. No
-    tracking, no ads, no analytics, no third-party SDKs, no accounts.</p>
-    <p>Contact: <a href="mailto:danielhellenes@me.com">danielhellenes@me.com</a></p>
-  </div>
+    <a class="tilbake" href="/floogfjare/"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Til forsiden</a>
+  </article>
 </main>
 
-<footer>
-  © 2026 Daniel Hellenes · <a href="/floogfjare/personvern/">Personvern</a> · <a href="/floogfjare/vilkar/">Vilkår</a><br>
-  Tidevannsdata © Kartverket
+<footer class="bunn">
+  <svg class="bunn-linje" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true"><path class="fyll" d="M0 18 L1200 18 L1200 36 L0 36 Z"/><path class="bak" d="M0 16 L1200 16"/><path class="strek" d="M0 18 L1200 18"/></svg>
+  <div class="bredde bunn-innhold">
+    <div>
+      <a class="merke" href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="" width="30" height="30">Flo og Fjære</a>
+      <p style="margin-top:12px">Vannstand akkurat nå, for hele norskekysten.</p>
+    </div>
+    <div>
+      <h2>Appen</h2>
+      <ul>
+        <li><a href="https://apps.apple.com/no/app/id6794909612">App Store</a></li>
+        <li><a href="/floogfjare/#tilbud">Gratis og Pro</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Om</h2>
+      <ul>
+        <li><a href="mailto:danielhellenes@me.com">Support</a></li>
+        <li><a href="/floogfjare/personvern/" aria-current="page">Personvern</a></li>
+        <li><a href="/floogfjare/vilkar/">Vilkår</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bredde"><div class="smaa"><span>© 2026 Daniel Hellenes</span><span>Tidevannsdata © Kartverket · Ikke til navigasjon</span></div></div>
 </footer>
 
+<script src="/floogfjare/sjo.js"></script>
+<script src="/floogfjare/side.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="nb">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Flo og Fjære – tidevann</title>
 <meta name="description" content="Vannstand akkurat nå — hjemme, på hytta og i båten. Virker uten internett, også uten dekning. Tidevann for hele norskekysten, regnet ut på telefonen. Nå også på iPad.">
 <meta property="og:title" content="Flo og Fjære – tidevann">
@@ -13,508 +13,790 @@
 <meta name="theme-color" content="#08243C">
 <link rel="icon" href="/floogfjare/ikon.png">
 <link rel="apple-touch-icon" href="/floogfjare/ikon.png">
+<link rel="stylesheet" href="/floogfjare/felles.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --sky-top: #0F4C75; --sky-bottom: #1B6FA8;
-    --water-shallow: #2E8FC4; --water-deep: #062A47;
-    --crest: #DDF1FA; --horizon: #7FB8D9; --accent: #8FD8FF;
-    --text: #F4FAFD; --deep: #08243C; --deep-soft: #0D3A5C;
-    --glass: rgba(6,42,71,.55); --glass-kant: rgba(244,250,253,.12);
+  /* ================= Toppen: et døgn ved sjøen ================= */
+  .helt {
+    position: relative; overflow: hidden; isolation: isolate;
+    height: max(640px, min(100svh, 960px));
   }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-    background: var(--deep); color: var(--text);
-    -webkit-font-smoothing: antialiased;
+  .helt canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+  /* Havet renner over i siden: bunnen av sjøen tones inn i bakgrunnen. */
+  .helt::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 14%; z-index: -1;
+    background: linear-gradient(rgba(8, 36, 60, 0), var(--dypt)); pointer-events: none;
   }
-  a { color: var(--accent); }
-  h2 { font-size: clamp(1.5rem, 4vw, 2rem); letter-spacing: -.02em; font-weight: 800; }
-  .under { margin-top: 10px; opacity: .85; line-height: 1.65; font-size: 1.05rem; }
+  .helt .bredde {
+    height: 100%; display: flex; flex-direction: column;
+    padding-top: clamp(104px, 16vh, 168px);
+  }
+  .helt h1 {
+    font-family: var(--rund); font-weight: 700;
+    font-size: clamp(44px, 9.4vw, 104px); line-height: .98; letter-spacing: -.04em;
+    max-width: 9.5em; text-wrap: balance;
+  }
+  .helt h1 span { display: block; color: var(--aksent); transition: color 1.2s ease; }
+  .helt .ingress { margin-top: 20px; color: rgba(244, 250, 253, .86); max-width: 27em; }
+  .helt .handling { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+  .helt .enheter { font-size: 15px; color: var(--dempet); }
 
-  /* ================= HERO: himmel som lever, sjø som stiger ================= */
-  .hero {
-    position: relative; overflow: hidden;
-    min-height: min(92vh, 780px); min-height: 560px;
-    background: linear-gradient(var(--sky-top), var(--sky-bottom));
+  /* Avlesningen: appens egen hovedlinje, i himmelen over vannet. */
+  .avlesning {
+    margin-top: auto; margin-bottom: 23svh; padding-top: 28px;
+    display: grid; justify-items: start; gap: 2px;
+    text-shadow: 0 1px 18px rgba(3, 18, 31, .35);
   }
-  /* Døgnet går: dag, kveld og natt ligger som lag over morgenhimmelen
-     og tones inn og ut — gradienter kan ikke animeres direkte, de
-     hopper; opacity glir. */
-  .himmel { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
-  .himmel-dag   { background: linear-gradient(#2A78B0, #6FB1D8); animation: dag 60s ease-in-out infinite; }
-  .himmel-kveld { background: linear-gradient(#2E5E8C, #C97A5A); animation: kveld 60s ease-in-out infinite; }
-  .himmel-natt  { background: linear-gradient(#0B1E33, #10314F); animation: natt 60s ease-in-out infinite; }
-  @keyframes dag   { 0%,8% { opacity: 0; } 22% { opacity: 1; } 36% { opacity: 1; } 48%,100% { opacity: 0; } }
-  @keyframes kveld { 0%,36% { opacity: 0; } 47% { opacity: 1; } 55% { opacity: 1; } 64%,100% { opacity: 0; } }
-  @keyframes natt  { 0%,55% { opacity: 0; } 64% { opacity: 1; } 84% { opacity: 1; } 96%,100% { opacity: 0; } }
-  .sol {
-    position: absolute; left: 50%; top: 58%; width: 260px; height: 260px;
-    margin-left: -130px; border-radius: 50%; pointer-events: none;
-    background: radial-gradient(circle, rgba(255,210,94,.55), rgba(255,210,94,0) 60%);
-    filter: blur(6px); animation: solgang 60s ease-in-out infinite;
+  @media (max-width: 899px) {
+    .helt .bredde { padding-top: 96px; }
   }
-  @keyframes solgang {
-    0%   { transform: translateY(40px); opacity: .5; }
-    22%  { transform: translateY(-160px); opacity: .9; }
-    45%  { transform: translateY(20px); opacity: .8; }
-    55%  { transform: translateY(120px); opacity: 0; }
-    85%  { transform: translateY(120px); opacity: 0; }
-    100% { transform: translateY(40px); opacity: .5; }
+  /* Korte telefoner (SE): litt mindre tittel, og avlesningen uten neste snu. */
+  @media (max-width: 899px) and (max-height: 760px) {
+    .helt h1 { font-size: 38px; }
+    .avlesning .verdi b { font-size: 48px; }
+    .avlesning .linje { display: none; }
   }
-  .horisont {
-    position: absolute; left: 0; right: 0; top: 60%; height: 26px;
-    background: radial-gradient(ellipse 55% 120% at 50% 50%,
-                rgba(127,184,217,.55), rgba(127,184,217,0));
-    filter: blur(3px); pointer-events: none;
+  @media (min-width: 900px) {
+    .avlesning { position: absolute; right: max(var(--kant), calc((100% - var(--bredde)) / 2 + var(--kant))); bottom: 31%; margin: 0; padding: 0; justify-items: end; text-align: right; }
   }
-  .hero-innhold {
-    position: relative; z-index: 3; text-align: center;
-    padding: clamp(36px, 7vh, 72px) 24px 0;
-  }
-  .ikon {
-    width: 104px; height: 104px; border-radius: 24px;
-    box-shadow: 0 12px 36px rgba(0,0,0,.4);
-  }
-  h1 {
-    margin-top: 18px; font-size: clamp(2.1rem, 6vw, 2.9rem);
-    font-weight: 800; letter-spacing: -.02em;
-  }
-  .tagline { margin-top: 8px; font-size: clamp(1.05rem, 3vw, 1.3rem); opacity: .92; }
-  .nyhet {
-    display: inline-block; margin-top: 14px; padding: 6px 14px; border-radius: 999px;
-    font-size: .88rem; font-weight: 600; letter-spacing: .01em;
-    background: rgba(143,216,255,.16); border: 1px solid rgba(143,216,255,.35);
-  }
-  /* Apples offisielle merke: aldri modifisert, minst 40 px høyt,
-     luft rundt på minst kvart høyde (retningslinjene). */
-  .lastned { display: inline-block; margin-top: 22px; }
-  .lastned img { display: block; height: 52px; width: auto; }
+  .avlesning .klokke { font-family: var(--rund); font-size: 15px; font-weight: 600; color: var(--dempet); }
+  .avlesning .verdi { display: flex; align-items: baseline; gap: 6px; font-family: var(--rund); }
+  .avlesning .verdi b { font-size: clamp(56px, 8vw, 84px); font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+  .avlesning .verdi small { font-size: 22px; font-weight: 500; color: var(--dempet); }
+  .avlesning .pil { width: 26px; height: 26px; margin-left: 4px; transition: transform 600ms var(--inn-ut); }
+  .avlesning .linje { font-family: var(--rund); font-size: 17px; font-weight: 500; color: rgba(244, 250, 253, .9); }
 
-  /* Den levende vannstanden: et lite glasskort som følger sjøen under. */
-  .maaler {
-    position: absolute; z-index: 3; left: 50%; bottom: 13%;
-    transform: translateX(-50%);
-    padding: 12px 22px; border-radius: 18px; text-align: center;
-    /* Ingen backdrop-filter: uskarp bakgrunn over bølger i bevegelse
-       flimret langs kortets kant (Daniels funn 15. sep). Tett glass. */
-    background: rgba(6,42,71,.82); border: 1px solid var(--glass-kant);
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  }
-  .maaler .tall { font-size: 2.2rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-  .maaler .tall small { font-size: 1rem; font-weight: 500; opacity: .8; margin-left: 4px; }
-  .maaler .retning { font-size: .9rem; color: var(--accent); margin-top: 2px; }
+  /* ================= Seksjoner ================= */
+  .seksjon { padding-top: clamp(96px, 13vw, 168px); }
+  .to-spalter { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 900px) { .to-spalter { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; } }
+  .to-spalter.speilet > :first-child { order: 0; }
+  @media (min-width: 900px) { .to-spalter.speilet > :first-child { order: 2; } }
+  .seksjon .mellom { margin-top: 14px; }
+  .seksjon .ingress { margin-top: 18px; }
 
-  /* Sjøen: tre bølgelag, hele sjøen stiger og synker som tidevannet. */
-  /* Sjøen strekker seg under heroens kant (bottom −14 %), så bunnen
-     alltid er mørkt vann uansett hvor tidevannet står — ellers viste
-     kanten seg som en hard strek som fulgte animasjonen. */
-  .sjo {
-    position: absolute; left: 0; right: 0; bottom: -14%; height: 56%; z-index: 1;
-    animation: tidevann 24s ease-in-out infinite;
+  .utsagn {
+    font-family: var(--rund); font-weight: 650;
+    font-size: clamp(30px, 5.2vw, 56px); line-height: 1.12; letter-spacing: -.03em;
+    max-width: 17em; text-wrap: balance;
   }
-  @keyframes tidevann {
-    0%, 100% { transform: translateY(9%); }
-    50%      { transform: translateY(-7%); }
-  }
-  .sjo .lag { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; overflow: hidden; }
-  .sjo svg {
-    position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; display: block;
-    will-change: transform; backface-visibility: hidden;
-  }
-  .lag-bak svg  { animation: driv 30s linear infinite; opacity: .5; }
-  .lag-midt svg { animation: driv 22s linear infinite reverse; opacity: .75; }
-  .lag-fram svg { animation: driv 16s linear infinite; }
-  @keyframes driv { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  /* Bunnen av heroen skal alltid være vann, også når sjøen står lavt —
-     og overgangen til siden under tones sømløst over i dypet. */
-  .sjo-bunn { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; background: var(--deep); z-index: 0; }
-  .hero::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14%; z-index: 2;
-    background: linear-gradient(rgba(8,36,60,0), var(--deep)); pointer-events: none;
-  }
+  .utsagn em { font-style: normal; color: var(--aksent); }
+  .utsagn-under { margin-top: 22px; }
 
-  /* ================= INNHOLD ================= */
-  main { max-width: 980px; margin: 0 auto; padding: 0 24px 8px; }
-  section { margin-top: 72px; }
-  .ingress {
-    font-size: clamp(1.15rem, 2.6vw, 1.35rem); line-height: 1.65; text-align: center;
-    max-width: 640px; margin: 56px auto 0;
+  /* ---------- Telefonen du drar i ---------- */
+  .telefon {
+    position: relative; width: min(330px, 78vw); aspect-ratio: 9 / 19.5; margin: 0 auto;
+    border-radius: 54px; padding: 11px;
+    background: linear-gradient(145deg, #1b2a38, #07121c 60%);
+    box-shadow: 0 0 0 1px rgba(221, 241, 250, .16) inset, 0 40px 80px rgba(0, 0, 0, .45), 0 0 0 1px rgba(0, 0, 0, .6);
   }
-  .chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 26px 0 0; }
-  .chip {
-    padding: 8px 16px; border-radius: 999px; font-size: .92rem;
-    background: rgba(143,216,255,.12); border: 1px solid rgba(143,216,255,.25);
+  .telefon .skjerm { position: relative; width: 100%; height: 100%; border-radius: 44px; overflow: hidden; background: var(--natt); }
+  .telefon canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .telefon .oy { position: absolute; top: 11px; left: 50%; width: 30%; height: 26px; transform: translateX(-50%); border-radius: 20px; background: #000; z-index: 3; }
+  .telefon .ui { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; padding-top: 58px; font-family: var(--rund); pointer-events: none; }
+  .telefon .sted {
+    font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 999px;
+    background: rgba(6, 42, 71, .32); border: 1px solid rgba(244, 250, 253, .2);
   }
+  .telefon .tid { margin-top: 8px; font-size: 13px; color: var(--dempet); height: 17px; }
+  .telefon .stort { margin-top: 4px; display: flex; align-items: baseline; gap: 4px; }
+  .telefon .stort b { font-size: 58px; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+  .telefon .stort small { font-size: 17px; color: var(--dempet); }
+  .telefon .trend { font-size: 13px; color: var(--aksent); margin-top: 2px; }
+  .telefon .kort {
+    position: absolute; z-index: 3; left: 10px; right: 10px; bottom: 12px;
+    padding: 12px 12px 8px; border-radius: 26px;
+    background: rgba(6, 26, 43, .72); border: 1px solid rgba(244, 250, 253, .1);
+  }
+  .telefon .kort .snu { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 0 4px 6px; }
+  .telefon .kort .snu span { color: var(--dempet); font-weight: 500; }
+  .kurve { width: 100%; height: 84px; touch-action: pan-y; cursor: grab; outline: none; }
+  .kurve:active { cursor: grabbing; }
+  .kurve:focus-visible { outline: 2px solid var(--aksent); outline-offset: 2px; border-radius: 12px; }
+  .hint {
+    position: absolute; left: 50%; bottom: 152px; transform: translateX(-50%);
+    font-size: 13px; font-weight: 600; letter-spacing: .01em; white-space: nowrap;
+    padding: 6px 13px; border-radius: 999px; color: var(--dypt); background: var(--aksent);
+    opacity: 0; transition: opacity 400ms var(--ut), transform 400ms var(--ut);
+    pointer-events: none; z-index: 4;
+  }
+  .hint.vises { opacity: 1; transform: translate(-50%, -4px); }
 
-  /* Tre tall som sier alt. */
-  /* Mobil først: rader med tallet til venstre; tre kolonner fra 560 px. */
-  .tall-rad { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 32px; }
-  .tall-kort {
-    display: flex; align-items: center; gap: 16px; text-align: left;
-    padding: 14px 18px; border-radius: 18px;
-    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.08);
-  }
-  .tall-kort b { flex: 0 0 96px; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; letter-spacing: -.02em; color: var(--accent); }
-  .tall-kort span { font-size: .92rem; opacity: .8; line-height: 1.45; }
-  @media (min-width: 560px) {
-    .tall-rad { grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .tall-kort { display: block; text-align: center; padding: 18px 10px; }
-    .tall-kort b { display: block; }
-    .tall-kort span { display: block; margin-top: 4px; }
-  }
+  /* ---------- Månen og springfloen ---------- */
+  .maaned { margin-top: 44px; }
+  .maaned svg { width: 100%; height: auto; overflow: visible; }
+  .maaned .kurven { fill: none; stroke: var(--kam); stroke-width: 1.4; stroke-linejoin: round; opacity: .9; }
+  .maaned .fyll { fill: url(#maanedFyll); }
+  .maaned .konvolutt { fill: none; stroke: var(--aksent); stroke-width: 1; stroke-dasharray: 3 5; opacity: 0; transition: opacity 1.4s var(--ut) 2.2s; }
+  .maaned.vist .konvolutt { opacity: .6; }
+  .maaned .etikett { font-family: var(--rund); font-size: 14px; font-weight: 600; fill: var(--dempet); }
+  .maaned .etikett.sterk { fill: var(--tekst); }
+  .maaned .dag { font-family: var(--rund); font-size: 13px; fill: var(--svak); }
+  @media (max-width: 559px) { .maaned .etikett { font-size: 13px; } .maaned .dag { font-size: 12px; } }
+  .maaned .tegnes { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .maaned.vist .tegnes { transition: stroke-dashoffset 3.2s var(--tidevann); stroke-dashoffset: 0; }
+  .maaned .maane { opacity: 0; transform: translateY(8px); transform-box: fill-box; transform-origin: center; transition: opacity 700ms var(--ut), transform 700ms var(--ut); }
+  .maaned.vist .maane { opacity: 1; transform: none; }
+  .forklaring-rad { margin-top: 28px; display: grid; gap: 18px; }
+  @media (min-width: 760px) { .forklaring-rad { grid-template-columns: 1fr 1fr; gap: 48px; } }
+  .forklaring-rad h3 { font-family: var(--rund); font-size: 19px; font-weight: 650; letter-spacing: -.01em; }
+  .forklaring-rad p { color: var(--dempet); margin-top: 4px; }
 
-  /* Slik virker det: tre animerte illustrasjoner. */
-  .tre { display: grid; gap: 18px; margin-top: 28px; }
-  @media (min-width: 720px) { .tre { grid-template-columns: repeat(3, 1fr); } }
-  .forklaring {
-    padding: 22px; border-radius: 22px;
-    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.09);
+  /* ---------- Kysten ---------- */
+  .kyst { position: relative; width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 848 / 1000; }
+  .kyst canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .kyst .navn {
+    position: absolute; font-family: var(--rund); font-size: 14px; font-weight: 600; color: rgba(244, 250, 253, .9);
+    transform: translate(11px, -50%); white-space: nowrap; pointer-events: none;
+    /* Kartglorie: navnet leses også der prikkene ligger tett. */
+    text-shadow: 0 0 2px var(--dypt), 0 0 4px var(--dypt), 0 0 8px var(--dypt), 0 0 14px var(--dypt);
   }
-  .forklaring h3 { font-size: 1.12rem; margin: 14px 0 6px; }
-  .forklaring p { line-height: 1.6; opacity: .88; font-size: .97rem; }
-  .ill { width: 100%; height: 150px; border-radius: 16px; overflow: hidden; background: linear-gradient(#0F4C75, #1B6FA8); position: relative; }
-  .ill svg { width: 100%; height: 100%; display: block; }
-  /* 1: vannet stiger i den lille telefonen */
-  .mini-vann { animation: minivann 8s ease-in-out infinite; transform-origin: bottom; }
-  @keyframes minivann { 0%, 100% { transform: translateY(26px); } 50% { transform: translateY(-14px); } }
-  /* 2: markøren glir langs kurven */
-  .kurve-linje { stroke-dasharray: 600; stroke-dashoffset: 600; animation: tegn 3s ease-out forwards; }
-  @keyframes tegn { to { stroke-dashoffset: 0; } }
-  /* 3: flymodus — en rolig puls i haken */
-  .puls { animation: puls 2.4s ease-in-out infinite; transform-origin: center; }
-  @keyframes puls { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.12); opacity: 1; } }
+  .kyst .navn::before { content: ""; position: absolute; left: -10px; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--tekst); box-shadow: 0 0 0 2px var(--dypt); transform: translateY(-50%); }
+  .kyst .navn.venstre { transform: translate(calc(-100% - 11px), -50%); }
+  .kyst .navn.venstre::before { left: auto; right: -10px; }
+  @media (max-width: 479px) { .kyst .navn { font-size: 13px; } }
+  .tallrad { margin-top: 40px; display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--linje); }
+  /* Kolonnen måles i tallets egen skriftstørrelse, så «< 2 min» alltid får plass på én linje. */
+  .tallrad > div { padding: 22px 0; border-bottom: 1px solid var(--linje); display: grid; font-size: clamp(30px, 4vw, 40px); grid-template-columns: 3.7em 1fr; gap: 16px; align-items: baseline; }
+  .tallrad b { font-family: var(--rund); font-size: 1em; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tallrad span { color: var(--dempet); font-size: 17px; }
 
-  /* Galleri: skjermbildene i App Store-stil, sveipbart. */
+  /* ---------- Galleri ---------- */
+  /* Galleriet går helt ut til kanten av vinduet, men første bilde står på linje med teksten. */
   .galleri {
-    display: flex; gap: 16px; overflow-x: auto; padding: 8px 4px 18px;
-    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; margin-top: 26px;
+    --renne: max(var(--kant), calc((100vw - var(--bredde)) / 2 + var(--kant)));
+    display: flex; gap: clamp(18px, 3vw, 32px); overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scrollbar-width: none; scroll-padding-inline: var(--renne);
+    padding: 44px var(--renne) 20px; margin: 0 calc(-1 * var(--renne));
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--kant), #000 calc(100% - var(--kant)), transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 var(--kant), #000 calc(100% - var(--kant)), transparent);
   }
   .galleri::-webkit-scrollbar { display: none; }
-  .galleri figure { flex: 0 0 auto; width: min(76vw, 300px); scroll-snap-align: center; margin: 0; }
-  .galleri img { width: 100%; height: auto; display: block; border-radius: 22px; box-shadow: 0 18px 44px rgba(0,0,0,.4); }
-  .galleri figcaption { text-align: center; font-size: .9rem; opacity: .75; margin-top: 10px; }
-
-  /* Nytt: iPad og kart. */
-  .nytt { display: grid; gap: 28px; align-items: center; margin-top: 28px; }
-  @media (min-width: 820px) { .nytt { grid-template-columns: 1.15fr 1fr; } .nytt.speil > :first-child { order: 2; } }
-  .ramme { border-radius: 22px; padding: 10px; background: #0b1826; border: 1px solid rgba(244,250,253,.12); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
-  .ramme img { width: 100%; height: auto; display: block; border-radius: 14px; }
-  .ramme.ipad { padding: 14px; border-radius: 28px; }
-  .ramme.ipad img { border-radius: 16px; }
-  .nytt h3 { font-size: 1.4rem; letter-spacing: -.01em; margin-bottom: 8px; }
-  .nytt p { line-height: 1.7; opacity: .9; }
-  .nytt ul { margin: 12px 0 0 18px; line-height: 1.7; opacity: .9; }
-
-  /* Funksjoner. */
-  .funk { display: grid; gap: 14px; margin-top: 26px; }
-  @media (min-width: 560px) { .funk { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 900px) { .funk { grid-template-columns: repeat(3, 1fr); } }
-  .f {
-    padding: 20px; border-radius: 20px;
-    background: rgba(244,250,253,.05); border: 1px solid rgba(244,250,253,.09);
-    transition: transform .2s ease, background .2s ease;
+  .galleri figure {
+    flex: 0 0 auto; width: min(64vw, 260px); scroll-snap-align: start;
+    opacity: 0; transform: translateX(32px);
+    transition: opacity 800ms var(--ut), transform 1000ms var(--ut);
+    transition-delay: calc(var(--n, 0) * 90ms + 120ms);
   }
-  .f:hover { transform: translateY(-3px); background: rgba(244,250,253,.08); }
-  .f .sym { font-size: 1.5rem; }
-  .f h3 { font-size: 1.05rem; margin: 10px 0 4px; }
-  .f p { line-height: 1.55; opacity: .86; font-size: .95rem; }
-  .pro { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; background: rgba(143,216,255,.18); color: var(--accent); vertical-align: middle; }
-  .pro-merknad { margin-top: 16px; font-size: .92rem; opacity: .75; text-align: center; line-height: 1.6; }
-
-  /* Om / support. */
-  .kort-rad { display: grid; gap: 16px; margin-top: 26px; }
-  @media (min-width: 720px) { .kort-rad { grid-template-columns: repeat(3, 1fr); } }
-  .kort {
-    padding: 24px; border-radius: 20px;
-    background: rgba(244,250,253,.06); border: 1px solid rgba(244,250,253,.10);
-    transition: transform .15s ease, background .15s ease;
+  .galleri.vist figure { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .galleri figure { opacity: 1; transform: none; transition: none; } }
+  .galleri .ramme {
+    border-radius: 38px; padding: 8px; background: linear-gradient(145deg, #1b2a38, #07121c 60%);
+    box-shadow: 0 0 0 1px rgba(221, 241, 250, .14) inset, 0 28px 60px rgba(0, 0, 0, .4);
+    transition: transform 500ms var(--ut);
   }
-  .kort:hover { transform: translateY(-2px); background: rgba(244,250,253,.09); }
-  .kort .emoji { font-size: 1.6rem; }
-  .kort h3 { font-size: 1.1rem; margin: 10px 0 6px; }
-  .kort p { line-height: 1.6; opacity: .9; font-size: .97rem; }
-  .kort a.knapp {
-    display: inline-block; margin-top: 14px; padding: 10px 18px;
-    border-radius: 999px; background: var(--accent); color: var(--deep);
-    font-weight: 600; text-decoration: none; font-size: .95rem;
+  .galleri img { width: 100%; height: auto; border-radius: 31px; }
+  .galleri figcaption { margin-top: 14px; font-family: var(--rund); font-size: 15px; font-weight: 600; text-align: center; }
+  .galleri figcaption span { display: block; font-family: var(--brod); font-weight: 400; font-size: 14px; color: var(--svak); margin-top: 2px; }
+  @media (hover: hover) and (pointer: fine) { .galleri figure:hover .ramme { transform: translateY(-6px); } }
+  .galleri-styring { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+  .galleri-styring button {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--linje-sterk);
+    background: transparent; color: var(--tekst); cursor: pointer; display: grid; place-items: center;
+    transition: background 160ms ease, transform 160ms var(--ut);
   }
-  .kort a.knapp:hover { filter: brightness(1.08); }
-  .merknad { margin-top: 44px; text-align: center; font-size: .88rem; opacity: .6; line-height: 1.6; }
-  footer { text-align: center; padding: 26px 24px 44px; font-size: .85rem; opacity: .65; line-height: 1.7; }
-  footer a { color: inherit; }
+  .galleri-styring button:hover { background: rgba(221, 241, 250, .08); }
+  .galleri-styring button:active { transform: scale(.95); }
+  @media (max-width: 719px) { .galleri-styring { display: none; } }
 
-  /* Avsløring ved scrolling. */
-  .avsl { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
-  .avsl.synlig { opacity: 1; transform: none; }
+  /* ---------- iPad ---------- */
+  .ipad {
+    border-radius: 30px; padding: 12px; background: linear-gradient(145deg, #1b2a38, #07121c 60%);
+    box-shadow: 0 0 0 1px rgba(221, 241, 250, .14) inset, 0 34px 70px rgba(0, 0, 0, .42);
+  }
+  .ipad img { width: 100%; height: auto; border-radius: 19px; }
+  .punkter { list-style: none; margin-top: 22px; border-top: 1px solid var(--linje); }
+  .punkter li { padding: 12px 0; border-bottom: 1px solid var(--linje); color: var(--dempet); }
+  .punkter li b { color: var(--tekst); font-weight: 600; }
 
+  /* ---------- Gratis og Pro ---------- */
+  .tilbud { margin-top: 44px; display: grid; gap: 40px; }
+  @media (min-width: 900px) { .tilbud { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .tilbud h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--linje-sterk); font-family: var(--rund); font-size: 22px; font-weight: 700; letter-spacing: -.015em; }
+  .tilbud h3 span { font-size: 14px; font-weight: 500; color: var(--svak); letter-spacing: 0; }
+  .tilbud ul { list-style: none; }
+  /* Radene kommer én og én, og skillelinjene trekkes fra venstre. */
+  .tilbud li {
+    position: relative; padding: 16px 0; display: grid; gap: 2px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 700ms var(--ut), transform 700ms var(--ut);
+    transition-delay: calc(var(--k, 0) * 70ms + 180ms);
+  }
+  .tilbud li::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--linje);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 1100ms var(--ut); transition-delay: inherit;
+  }
+  .tilbud li:nth-child(2) { --k: 1; } .tilbud li:nth-child(3) { --k: 2; }
+  .tilbud li:nth-child(4) { --k: 3; } .tilbud li:nth-child(5) { --k: 4; }
+  .tilbud .vist li { opacity: 1; transform: none; }
+  .tilbud .vist li::after { transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    .himmel, .sol, .sjo, .lag-bak svg, .lag-midt svg, .lag-fram svg, .mini-vann, .puls { animation: none !important; }
-    .kurve-linje { stroke-dashoffset: 0; animation: none; }
-    .avsl { opacity: 1; transform: none; transition: none; }
-    html { scroll-behavior: auto; }
+    .tilbud li, .tilbud li::after { opacity: 1; transform: none; transition: none; }
   }
+  .tilbud li b { font-family: var(--rund); font-weight: 650; font-size: 17px; }
+  .tilbud li span { color: var(--dempet); font-size: 16px; }
+  .tilbud .pro h3 { color: var(--aksent); }
+  .tilbud-merknad { margin-top: 26px; color: var(--dempet); font-size: 16px; }
+
+  /* ---------- Fasit og kontakt ---------- */
+  .lenkerad { margin-top: 40px; border-top: 1px solid var(--linje-sterk); }
+  .lenkerad a {
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 20px;
+    padding: 22px 0; border-bottom: 1px solid var(--linje); color: var(--tekst); text-decoration: none;
+  }
+  .lenkerad a b { font-family: var(--rund); font-size: clamp(20px, 2.6vw, 26px); font-weight: 650; letter-spacing: -.015em; }
+  .lenkerad a span { grid-column: 1; color: var(--dempet); font-size: 16px; }
+  .lenkerad a svg { grid-row: 1 / span 2; grid-column: 2; transition: transform 240ms var(--ut); color: var(--aksent); }
+  @media (hover: hover) and (pointer: fine) { .lenkerad a:hover svg { transform: translateX(6px); } .lenkerad a:hover b { color: var(--aksent); } }
+  .merknad { margin-top: 36px; color: var(--svak); font-size: 16px; line-height: 1.6; max-width: 46em; }
 </style>
 </head>
 <body>
+<a class="hopp" href="#innhold">Hopp til innholdet</a>
 
-<header class="hero">
-  <div class="himmel himmel-dag" aria-hidden="true"></div>
-  <div class="himmel himmel-kveld" aria-hidden="true"></div>
-  <div class="himmel himmel-natt" aria-hidden="true"></div>
-  <div class="sol" aria-hidden="true"></div>
-  <div class="horisont" aria-hidden="true"></div>
-  <div class="hero-innhold">
-    <img class="ikon" src="/floogfjare/ikon.png" alt="Flo og Fjære-ikonet">
-    <h1>Flo og Fjære</h1>
-    <p class="tagline">Vannstand akkurat nå&nbsp;— uten internett</p>
-    <div><span class="nyhet">Tilgjengelig på iPhone og iPad</span></div>
-    <a class="lastned" href="https://apps.apple.com/no/app/id6794909612">
-      <img src="/floogfjare/appstore-merke.svg" alt="Last ned i App Store">
-    </a>
+<header class="helt" aria-label="Flo og Fjære">
+  <canvas id="heltSjo" aria-hidden="true"></canvas>
+  <div class="topp">
+    <a class="merke" href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="" width="30" height="30">Flo og Fjære</a>
+    <nav aria-label="Snarveier">
+      <a class="kan-skjules" href="#tiden">Slik virker den</a>
+      <a class="kan-skjules" href="#tilbud">Gratis og Pro</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
   </div>
-
-  <div class="maaler" aria-hidden="true">
-    <div class="tall"><span id="cm">84</span><small>cm</small></div>
-    <div class="retning" id="retning">↗ Stigende sjø</div>
-  </div>
-
-  <div class="sjo-bunn" aria-hidden="true"></div>
-  <div class="sjo" aria-hidden="true">
-    <div class="lag lag-bak">
-      <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
-        <path d="M0,70 C150,50 300,94 600,72 C900,50 1050,94 1200,70
-                 C1350,50 1500,94 1800,72 C2100,50 2250,94 2400,70
-                 L2400,240 L0,240 Z" fill="#7FB8D9"/>
-      </svg>
+  <div class="bredde">
+    <h1>Vannstand akkurat&nbsp;nå. <span>Også uten dekning.</span></h1>
+    <p class="ingress">Tidevann for hele norskekysten, regnet ut på telefonen. Hjemme, på hytta og i båten.</p>
+    <div class="handling">
+      <a class="butikk" href="https://apps.apple.com/no/app/id6794909612"><img src="/floogfjare/appstore-merke.svg" alt="Last ned i App Store" width="150" height="50"></a>
+      <span class="enheter">iPhone og iPad · Gratis å laste ned</span>
     </div>
-    <div class="lag lag-midt">
-      <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
-        <path d="M0,84 C180,62 360,104 600,82 C840,60 1020,104 1200,84
-                 C1380,62 1560,104 1800,82 C2040,60 2220,104 2400,84
-                 L2400,240 L0,240 Z" fill="#3E9AD0"/>
-      </svg>
-    </div>
-    <div class="lag lag-fram">
-      <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="vann" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2E8FC4"/>
-            <stop offset=".6" stop-color="#0D3A5C"/>
-            <stop offset=".85" stop-color="#08243C"/>
-          </linearGradient>
-        </defs>
-        <path d="M0,96 C200,70 380,118 600,94 C820,72 1000,116 1200,96
-                 C1400,70 1580,118 1800,94 C2020,72 2200,116 2400,96
-                 L2400,240 L0,240 Z" fill="url(#vann)"/>
-        <path d="M0,96 C200,70 380,118 600,94 C820,72 1000,116 1200,96
-                 C1400,70 1580,118 1800,94 C2020,72 2200,116 2400,96"
-              fill="none" stroke="#DDF1FA" stroke-width="5" stroke-linecap="round"/>
-      </svg>
+    <div class="avlesning" aria-hidden="true">
+      <span class="klokke tall" id="heltKlokke">kl. 19:00</span>
+      <span class="verdi"><b class="tall" id="heltCm">166</b><small>cm</small>
+        <svg class="pil" id="heltPil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </span>
+      <span class="linje" id="heltLinje">Høyvann kl. 22:14</span>
     </div>
   </div>
 </header>
 
-<main>
-  <p class="ingress avsl"><strong>Vannet er skjermen.</strong> Flo og Fjære
-  viser vannstanden som en levende sjø: stiger vannet på skjermen,
-  stiger det i fjæra. Du trenger ikke lese et eneste tall — men de
-  står der når du vil ha dem.</p>
+<main id="innhold">
 
-  <div class="chips avsl">
-    <span class="chip"><span aria-hidden="true">✈️</span> Virker uten internett og dekning</span>
-    <span class="chip"><span aria-hidden="true">🗺️</span> Data fra Kartverket</span>
-    <span class="chip"><span aria-hidden="true">🔒</span> Samler ingen data</span>
-    <span class="chip"><span aria-hidden="true">🌗</span> Sol, måne og springflo</span>
-  </div>
-
-  <div class="tall-rad avsl">
-    <div class="tall-kort"><b>4 372</b><span>kystpunkter fra svenskegrensa til Svalbard</span></div>
-    <div class="tall-kort"><b>&lt; 2 min</b><span>avvik fra Kartverkets tabeller for høyvann og lavvann</span></div>
-    <div class="tall-kort"><b>0</b><span>data samlet inn. Posisjonen din blir på telefonen</span></div>
-  </div>
-
-  <!-- ================= SLIK VIRKER DET ================= -->
-  <section class="avsl">
-    <h2>Slik virker det</h2>
-    <div class="tre">
-      <div class="forklaring">
-        <div class="ill" aria-hidden="true">
-          <svg viewBox="0 0 300 150">
-            <rect x="105" y="10" width="90" height="170" rx="16" fill="#0b1826" stroke="rgba(244,250,253,.25)"/>
-            <clipPath id="skjerm"><rect x="112" y="18" width="76" height="140" rx="10"/></clipPath>
-            <g clip-path="url(#skjerm)">
-              <rect x="112" y="18" width="76" height="140" fill="#1B6FA8"/>
-              <g class="mini-vann">
-                <path d="M100,80 C120,72 135,88 150,80 C165,72 180,88 200,80 L200,200 L100,200 Z" fill="#2E8FC4"/>
-                <path d="M100,80 C120,72 135,88 150,80 C165,72 180,88 200,80" fill="none" stroke="#DDF1FA" stroke-width="2"/>
-              </g>
-              <text x="150" y="52" text-anchor="middle" fill="#F4FAFD" font-size="20" font-weight="800">91</text>
-              <text x="150" y="64" text-anchor="middle" fill="#F4FAFD" font-size="7" opacity=".8">over laveste fjære</text>
-            </g>
-          </svg>
-        </div>
-        <h3>Vannet er skjermen</h3>
-        <p>Sjøen på skjermen stiger og synker i takt med den ekte. Himmelen følger sola der du er, fra morgen til natt.</p>
-      </div>
-      <div class="forklaring">
-        <div class="ill" aria-hidden="true">
-          <svg viewBox="0 0 300 150">
-            <path id="bane" class="kurve-linje" d="M20,95 C50,40 80,40 110,95 C140,150 170,150 200,95 C230,40 260,40 290,95"
-                  fill="none" stroke="#DDF1FA" stroke-width="3" stroke-linecap="round"/>
-            <path d="M20,95 C50,40 80,40 110,95 C140,150 170,150 200,95 C230,40 260,40 290,95 L290,150 L20,150 Z" fill="rgba(221,241,250,.12)"/>
-            <circle r="7" fill="#8FD8FF">
-              <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear">
-                <mpath href="#bane"/>
-              </animateMotion>
-            </circle>
-            <text x="150" y="28" text-anchor="middle" fill="#F4FAFD" font-size="11" opacity=".85">dra fingeren — se fram og tilbake i tid</text>
-          </svg>
-        </div>
-        <h3>Dra i tiden</h3>
-        <p>Legg fingeren på kurven og spol i døgnet: vannet, lyset og tallet følger med. Slipp, og sjøen glir tilbake til nå.</p>
-      </div>
-      <div class="forklaring">
-        <div class="ill" aria-hidden="true">
-          <svg viewBox="0 0 300 150">
-            <text x="150" y="70" text-anchor="middle" font-size="46">✈️</text>
-            <g class="puls">
-              <circle cx="205" cy="52" r="16" fill="#8FD8FF"/>
-              <path d="M197,52 l6,6 l11,-12" fill="none" stroke="#08243C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-            <text x="150" y="118" text-anchor="middle" fill="#F4FAFD" font-size="12" opacity=".9">regnet ut på telefonen — også i flymodus</text>
-          </svg>
-        </div>
-        <h3>Uten internett</h3>
-        <p>Appen har en matematisk modell av hvordan månen og sola drar i havet, og regner ut vannstanden selv. Derfor svarer den med én gang, også der det ikke er dekning.</p>
-      </div>
-    </div>
+  <section class="bredde seksjon" aria-labelledby="t-skjermen">
+    <p class="overline" data-avsl>Vannet er skjermen</p>
+    <h2 class="utsagn" id="t-skjermen" data-avsl style="--i:1">Stiger sjøen på skjermen, <em>stiger den i fjæra.</em></h2>
+    <p class="ingress utsagn-under" data-avsl style="--i:2">Ingen tabeller å tolke. Vannstanden er en levende sjø, himmelen følger sola der du er, og bølgene roer seg når tidevannet snur. Tallene står der når du vil ha dem.</p>
   </section>
 
-  <!-- ================= GALLERI ================= -->
-  <section class="avsl">
-    <h2>Se den i bruk</h2>
-    <p class="under">Sveip gjennom skjermbildene.</p>
-    <div class="galleri">
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-hjem.jpg" alt="Hovedskjermen om dagen: vannstanden som en levende sjø" loading="lazy"></div><figcaption>Den levende sjøen</figcaption></figure>
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-natt.jpg" alt="Hovedskjermen om natten: himmelen følger sola" loading="lazy"></div><figcaption>Himmelen følger sola</figcaption></figure>
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-kurve.jpg" alt="Kurve for flere døgn med høyvann og lavvann" loading="lazy"></div><figcaption>Fram og tilbake i tid</figcaption></figure>
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-planlegger.jpg" alt="Fjæretur-planleggeren" loading="lazy"></div><figcaption>Fjæretur-planleggeren</figcaption></figure>
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-steder.jpg" alt="Stedsvelgeren: søk, min posisjon og velg på kartet" loading="lazy"></div><figcaption>Hele kysten</figcaption></figure>
-      <figure><div class="ramme"><img src="/floogfjare/bilder/iphone-kart.jpg" alt="Kartet i stedsvelgeren med kystpunkter" loading="lazy"></div><figcaption>Velg på kartet</figcaption></figure>
-    </div>
-  </section>
-
-  <!-- ================= NYTT ================= -->
-  <section class="avsl">
-    <h2>Nytt: like hjemme på iPad</h2>
-    <div class="nytt">
-      <div class="ramme ipad"><img src="/floogfjare/bilder/ipad-hjem.jpg" alt="Flo og Fjære på iPad: den levende sjøen med to døgns kurve og moduler for sol, måne og steder" loading="lazy"></div>
+  <section class="bredde seksjon" id="tiden" aria-labelledby="t-tiden">
+    <div class="to-spalter">
       <div>
-        <h3>Det store lerretet</h3>
-        <p>På iPad fyller sjøen hele skjermen. Nederst ligger to døgn med kurve og merkelapp på hvert høyvann og lavvann, og til høyre små moduler for soloppgang og solnedgang, månefase og favorittstedene dine.</p>
+        <p class="overline" data-avsl>Dra i tiden</p>
+        <h2 class="mellom" id="t-tiden" data-avsl style="--i:1">Spol i døgnet med fingeren.</h2>
+        <p class="ingress" data-avsl style="--i:2">Legg fingeren på kurven og dra. Vannet, lyset og tallet følger med. Slipp, og sjøen glir tilbake til nå.</p>
+        <ul class="punkter" data-avsl style="--i:3">
+          <li><b>Neste høyvann og lavvann</b> med klokkeslett, høyde og nedtelling</li>
+          <li><b>Springflo og nippflo</b> merket når forskjellen er større eller mindre enn vanlig</li>
+          <li><b>Widgets og låseskjerm</b> med vannstanden der du er</li>
+        </ul>
+      </div>
+      <div data-avsl style="--i:1">
+        <div class="telefon">
+          <div class="skjerm">
+            <canvas id="telefonSjo" aria-hidden="true"></canvas>
+            <div class="oy" aria-hidden="true"></div>
+            <div class="ui">
+              <span class="sted">Svolvær</span>
+              <span class="tid tall" id="tlfTid"></span>
+              <span class="stort"><b class="tall" id="tlfCm">166</b><small>cm</small></span>
+              <span class="trend" id="tlfTrend">Stigende sjø</span>
+            </div>
+            <div class="hint" id="tlfHint">Dra i kurven</div>
+            <div class="kort">
+              <div class="snu"><b id="tlfSnu1">Høyvann 10:34</b><b id="tlfSnu2">Lavvann 16:55</b></div>
+              <svg class="kurve" id="tlfKurve" viewBox="0 0 300 84" role="slider" tabindex="0"
+                   aria-label="Tid. Dra eller bruk piltastene for å se vannstanden fram og tilbake i tid."
+                   aria-valuemin="-6" aria-valuemax="24" aria-valuenow="0" aria-valuetext="Nå">
+                <defs>
+                  <linearGradient id="kurveFyll" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#DDF1FA" stop-opacity=".26"/>
+                    <stop offset="1" stop-color="#DDF1FA" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path id="tlfFyll" fill="url(#kurveFyll)"/>
+                <path id="tlfLinje" fill="none" stroke="#DDF1FA" stroke-width="2" stroke-linecap="round"/>
+                <line id="tlfNaa" y1="6" y2="80" stroke="rgba(244,250,253,.35)" stroke-width="1"/>
+                <circle id="tlfPrikk" r="6" fill="#F4FAFD"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bredde seksjon" aria-labelledby="t-maanen">
+    <p class="overline" data-avsl>Sol, måne og springflo</p>
+    <h2 class="mellom" id="t-maanen" data-avsl style="--i:1">Det er månen som bestemmer.</h2>
+    <p class="ingress" data-avsl style="--i:2">To ganger i måneden står sola og månen på linje, og forskjellen mellom flo og fjære blir størst. Appen kjenner rytmen, og viser den fram i tid.</p>
+    <div class="maaned" id="maaned" role="img" aria-label="En måned med tidevann: forskjellen mellom flo og fjære vokser rundt nymåne og fullmåne (springflo) og krymper rundt halvmåne (nippflo)."></div>
+    <div class="forklaring-rad">
+      <div data-avsl><h3>Springflo</h3><p>Rundt nymåne og fullmåne: høyere flo og lavere fjære enn vanlig. Den beste tiden å gå i fjæra.</p></div>
+      <div data-avsl style="--i:1"><h3>Nippflo</h3><p>Rundt halvmåne: mindre forskjell. Appen merker begge, og viser månefasen på kurven.</p></div>
+    </div>
+  </section>
+
+  <section class="bredde seksjon" aria-labelledby="t-kysten">
+    <div class="to-spalter">
+      <div>
+        <p class="overline" data-avsl>Hele kysten, uten nett</p>
+        <h2 class="mellom" id="t-kysten" data-avsl style="--i:1">4 372 steder. Alle i lomma.</h2>
+        <p class="ingress" data-avsl style="--i:2">Hver prikk er et kystpunkt i appen, fra svenskegrensa til Vardø. Lyset er høyvannet: det vandrer nordover langs kysten to ganger i døgnet. Her går det på sju sekunder, regnet ut fra de samme tallene appen bruker.</p>
+        <div class="tallrad" data-avsl style="--i:3">
+          <div><b class="tall" data-teller="4372" data-format="tusen">4 372</b><span>kystpunkter, regnet ut på telefonen</span></div>
+          <div><b class="tall">&lt; 2 min</b><span>avvik fra Kartverkets tabeller for høyvann og lavvann</span></div>
+          <div><b class="tall" data-teller="0">0</b><span>data samlet inn. Posisjonen din blir på telefonen</span></div>
+        </div>
+      </div>
+      <div data-avsl style="--i:1">
+        <div class="kyst" id="kyst" role="img" aria-label="Kart over norskekysten med 4 367 kystpunkter. Et lysbånd viser høyvannet som vandrer nordover.">
+          <canvas id="kystLerret" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bredde seksjon" aria-labelledby="t-bruk">
+    <p class="overline" data-avsl>Se den i bruk</p>
+    <h2 class="mellom" id="t-bruk" data-avsl style="--i:1">Seks skjermer, én sjø.</h2>
+    <div class="galleri" id="galleri" tabindex="0" aria-label="Skjermbilder fra appen" data-avsl style="--i:2">
+      <figure style="--n:0"><div class="ramme"><img src="/floogfjare/bilder/iphone-hjem.jpg" alt="Hovedskjermen om dagen: vannstanden som en levende sjø" loading="lazy" width="600" height="1300"></div><figcaption>Den levende sjøen<span>Vannstand og retning</span></figcaption></figure>
+      <figure style="--n:1"><div class="ramme"><img src="/floogfjare/bilder/iphone-natt.jpg" alt="Hovedskjermen om natten: himmelen følger sola" loading="lazy" width="600" height="1300"></div><figcaption>Himmelen følger sola<span>Dag, skumring og natt</span></figcaption></figure>
+      <figure style="--n:2"><div class="ramme"><img src="/floogfjare/bilder/iphone-kurve.jpg" alt="Kurve for flere døgn med høyvann og lavvann" loading="lazy" width="600" height="1300"></div><figcaption>Fram og tilbake i tid<span>Kurver med springflo</span></figcaption></figure>
+      <figure style="--n:3"><div class="ramme"><img src="/floogfjare/bilder/iphone-planlegger.jpg" alt="Fjæretur-planleggeren med lave fjærer i dagslys" loading="lazy" width="600" height="1300"></div><figcaption>Fjæretur<span>Lave fjærer i dagslys</span></figcaption></figure>
+      <figure style="--n:4"><div class="ramme"><img src="/floogfjare/bilder/iphone-steder.jpg" alt="Stedsvelgeren: søk, min posisjon og velg på kartet" loading="lazy" width="600" height="1300"></div><figcaption>Hele kysten<span>Søk, posisjon og favoritter</span></figcaption></figure>
+      <figure style="--n:5"><div class="ramme"><img src="/floogfjare/bilder/iphone-kart.jpg" alt="Kartet i stedsvelgeren med kystpunkter" loading="lazy" width="600" height="1300"></div><figcaption>Velg på kartet<span>Trykk på kysten</span></figcaption></figure>
+    </div>
+    <div class="galleri-styring">
+      <button type="button" data-retning="-1" aria-label="Forrige skjermbilde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button type="button" data-retning="1" aria-label="Neste skjermbilde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+  </section>
+
+  <section class="bredde seksjon" aria-labelledby="t-ipad">
+    <div class="to-spalter speilet">
+      <div>
+        <p class="overline" data-avsl>iPad</p>
+        <h2 class="mellom" id="t-ipad" data-avsl style="--i:1">Det store lerretet.</h2>
+        <p class="ingress" data-avsl style="--i:2">På iPad fyller sjøen hele skjermen, med to døgn kurve nederst og små moduler for sol, måne og stedene dine.</p>
+        <ul class="punkter" data-avsl style="--i:3">
+          <li><b>Alle retninger,</b> også delt skjerm</li>
+          <li><b>Velg sted rett fra kartet,</b> med kystpunktene samlet i bobler</li>
+          <li><b>Samme skrubbing i tid</b> som på telefonen</li>
+        </ul>
+      </div>
+      <div class="ipad" data-avsl style="--i:1"><img src="/floogfjare/bilder/ipad-hjem.jpg" alt="Flo og Fjære på iPad: den levende sjøen med to døgns kurve og moduler for sol, måne og steder" loading="lazy" width="1200" height="900"></div>
+    </div>
+  </section>
+
+  <section class="bredde seksjon" id="tilbud" aria-labelledby="t-tilbud">
+    <p class="overline" data-avsl>Gratis og Pro</p>
+    <h2 class="mellom" id="t-tilbud" data-avsl style="--i:1">Se selv er gratis. Appen som sier fra, er Pro.</h2>
+    <div class="tilbud">
+      <div data-avsl>
+        <h3>Gratis <span>for alltid</span></h3>
         <ul>
-          <li>Alle retninger, også delt skjerm</li>
-          <li>Samme skrubbing i tid som på telefonen</li>
-          <li>Widgets på hjemskjermen</li>
+          <li><b>Den levende sjøen</b><span>Vannstand, retning og springflo-merke</span></li>
+          <li><b>Kurve for 1 og 3 døgn</b><span>Høyvann og lavvann, dra i tiden med fingeren</span></li>
+          <li><b>Steder</b><span>Søk langs hele kysten, velg på kartet, bruk posisjonen din</span></li>
+          <li><b>Widgets og låseskjerm</b><span>Vannstanden der du er, uten å åpne appen</span></li>
+          <li><b>Sol og måne</b><span>Soloppgang, solnedgang og månefasen</span></li>
+        </ul>
+      </div>
+      <div class="pro" data-avsl style="--i:1">
+        <h3>Pro <span>engangskjøp</span></h3>
+        <ul>
+          <li><b>Fjæretur-planleggeren</b><span>Lave fjærer i dagslys, uker og måneder fram</span></li>
+          <li><b>Varsler</b><span>Før høyvann og lavvann, og når sjøen krysser et nivå du velger</span></li>
+          <li><b>Kurver til 30 døgn</b><span>Hele måneden, med springflokalenderen</span></li>
+          <li><b>Flere favoritter</b><span>Så mange steder du vil, sammenlignet i én oversikt</span></li>
+          <li><b>Nedtelling på låseskjermen</b><span>Tiden til neste snu, også i Dynamic Island</span></li>
         </ul>
       </div>
     </div>
-    <div class="nytt speil" style="margin-top:44px">
-      <div class="ramme ipad"><img src="/floogfjare/bilder/ipad-kart.jpg" alt="Kartvelgeren: kystpunktene som klynger med tall, og et valgt punkt med Velg-knapp" loading="lazy"></div>
-      <div>
-        <h3>Velg sted rett fra kartet</h3>
-        <p>Alle kystpunktene ligger på et kart. Zoomet ut ser du dem som bobler med tall; zoom inn, eller trykk på kysten, så velger appen nærmeste punkt for deg. Søket og favorittene finnes fortsatt, kartet er bare én vei til.</p>
-      </div>
-    </div>
+    <p class="tilbud-merknad" data-avsl>Ingen abonnement, ingen konto, ingen reklame. Kjøpet følger Apple-ID-en din.</p>
   </section>
 
-  <!-- ================= FUNKSJONER ================= -->
-  <section class="avsl">
-    <h2>Alt du får</h2>
-    <div class="funk">
-      <div class="f"><div class="sym" aria-hidden="true">🌊</div><h3>Den levende sjøen</h3><p>Vannstand, retning og springflo-merking. Sjøen stiger og synker som den ekte.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">📈</div><h3>Kurve for 1 og 3 døgn</h3><p>Høyvann og lavvann med klokkeslett og høyde, dra i tiden med fingeren.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">📍</div><h3>Steder</h3><p>Søk langs hele kysten, velg på kartet, bruk posisjonen din, lagre én favoritt.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">🔲</div><h3>Widgets og låseskjerm</h3><p>Vannstanden på hjemskjermen og en måler på låseskjermen.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">🌗</div><h3>Sol og måne</h3><p>Soloppgang, solnedgang og månefasen som driver springflo og nippflo.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">🏖️</div><h3>Fjæretur-planleggeren <span class="pro">Pro</span></h3><p>Lave fjærer i dagslys, uker og måneder fram. Søk etter helg, dagslys og klokkevindu.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">🔔</div><h3>Varsler <span class="pro">Pro</span></h3><p>Beskjed før høyvann og lavvann, og når sjøen krysser et nivå du velger.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">📅</div><h3>Kurver til 30 døgn <span class="pro">Pro</span></h3><p>Hele måneden med springflo og nippflo, og springflokalenderen.</p></div>
-      <div class="f"><div class="sym" aria-hidden="true">⭐</div><h3>Flere favoritter <span class="pro">Pro</span></h3><p>Så mange steder du vil, og sammenlign dem i én oversikt. Nedtelling på låseskjermen.</p></div>
-    </div>
-    <p class="pro-merknad">Flo og Fjære Pro er et valgfritt engangskjøp. Ingen abonnement, ingen konto. Kjernen er og forblir gratis.</p>
+  <section class="bredde seksjon" id="kontakt" aria-labelledby="t-fasit">
+    <p class="overline" data-avsl>Testet mot fasit</p>
+    <h2 class="mellom" id="t-fasit" data-avsl style="--i:1">Kontrollert mot Kartverket, fra Oslo til Ny-Ålesund.</h2>
+    <p class="ingress" data-avsl style="--i:2">Tidspunktene for høyvann og lavvann stemmer på under to minutter med de offisielle tabellene. Høydene er astronomisk tidevann: vær og vind kan gi avvik, særlig ved stormflo.</p>
+    <nav class="lenkerad" aria-label="Kontakt og dokumenter" data-avsl style="--i:3">
+      <a href="mailto:danielhellenes@me.com"><b>Support</b><span>Spørsmål, feil eller forslag. Alt leses og besvares.</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/floogfjare/personvern/"><b>Personvern</b><span>Appen samler ikke inn noen data.</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="/floogfjare/vilkar/"><b>Vilkår</b><span>Kort og ærlig, og ikke til navigasjon.</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </nav>
+    <p class="merknad" data-avsl>Flo og Fjære er laget av én person på fritiden. Tidevannsdata fra Kartverket, Sjødivisjonen — prediksjonene er et bearbeidet verk og regnes ut på telefonen. Appen er utviklet uavhengig av Kartverket. Ikke til navigasjon.</p>
   </section>
-
-  <!-- ================= OM / SUPPORT ================= -->
-  <section class="avsl">
-    <h2>Testet mot fasit</h2>
-    <p class="under">Beregningene er kontrollert mot Kartverkets offisielle tidevannstabeller for havner fra Oslo til Ny-Ålesund. Tidspunktene for høyvann og lavvann stemmer på under to minutter. Høydene er astronomisk prediksjon: vær kan gi avvik, særlig ved stormflo.</p>
-    <div class="kort-rad">
-      <div class="kort">
-        <span class="emoji" aria-hidden="true">💬</span>
-        <h3>Support</h3>
-        <p>Spørsmål, feilrapporter eller forslag? Alle henvendelser leses og besvares.</p>
-        <a class="knapp" href="mailto:danielhellenes@me.com">Send e-post</a>
-      </div>
-      <div class="kort">
-        <span class="emoji" aria-hidden="true">🔒</span>
-        <h3>Personvern</h3>
-        <p>Appen samler ikke inn noen data. Alt beregnes lokalt på telefonen — også posisjonen din blir der.</p>
-        <a class="knapp" href="/floogfjare/personvern/">Les erklæringen</a>
-      </div>
-      <div class="kort">
-        <span class="emoji" aria-hidden="true">👤</span>
-        <h3>Om prosjektet</h3>
-        <p>Flo og Fjære er laget av én person på fritiden. Alle henvendelser leses og besvares, men feilretting skjer når jeg har tid, og jeg lover ingen tidsfrister.</p>
-      </div>
-    </div>
-  </section>
-
-  <p class="merknad">Tidevannsdata fra Kartverket, Sjødivisjonen — prediksjonene er et bearbeidet verk og regnes ut på telefonen. Appen er utviklet uavhengig av Kartverket. Ikke til navigasjon.</p>
 </main>
 
-<footer>
-  © 2026 Daniel Hellenes · <a href="/floogfjare/personvern/">Personvern</a> · <a href="/floogfjare/vilkar/">Vilkår</a><br>
-  Tidevannsdata © Kartverket
+<footer class="bunn">
+  <svg class="bunn-linje" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true"><path class="fyll" d="M0 18 L1200 18 L1200 36 L0 36 Z"/><path class="bak" d="M0 16 L1200 16"/><path class="strek" d="M0 18 L1200 18"/></svg>
+  <div class="bredde bunn-innhold">
+    <div>
+      <a class="merke" href="/floogfjare/"><img src="/floogfjare/ikon.png" alt="" width="30" height="30">Flo og Fjære</a>
+      <p style="margin-top:12px">Vannstand akkurat nå, for hele norskekysten.</p>
+    </div>
+    <div>
+      <h2>Appen</h2>
+      <ul>
+        <li><a href="https://apps.apple.com/no/app/id6794909612">App Store</a></li>
+        <li><a href="#tilbud">Gratis og Pro</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Om</h2>
+      <ul>
+        <li><a href="mailto:danielhellenes@me.com">Support</a></li>
+        <li><a href="/floogfjare/personvern/">Personvern</a></li>
+        <li><a href="/floogfjare/vilkar/">Vilkår</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bredde"><div class="smaa"><span>© 2026 Daniel Hellenes</span><span>Tidevannsdata © Kartverket · Ikke til navigasjon</span></div></div>
 </footer>
 
+<script src="/floogfjare/sjo.js"></script>
+<script src="/floogfjare/kyst.js"></script>
 <script>
-  // Den levende vannstanden i heroen følger sjøens tidevannsanimasjon
-  // (24 s per syklus), så tallet og bølgene stiger sammen.
-  (function () {
-    var cm = document.getElementById('cm');
-    var retning = document.getElementById('retning');
-    var redusert = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (redusert) { return; }
-    var start = performance.now();
-    function tikk(naa) {
-      var t = ((naa - start) / 24000) * 2 * Math.PI;
-      var niva = Math.round(84 + 40 * Math.sin(t + Math.PI));
-      var stiger = Math.cos(t + Math.PI) > 0;
-      cm.textContent = niva;
-      retning.textContent = stiger ? '↗ Stigende sjø' : '↘ Fallende sjø';
-      requestAnimationFrame(tikk);
+(function () {
+  'use strict';
+  var F = window.FloSjo;
+  var smal = window.matchMedia('(max-width: 899px)');
+
+  // ================= Toppen: solnedgang, så natt og ny dag =================
+  // Klokka går sakte gjennom skumringen (appens og ikonets vakreste øyeblikk)
+  // og glir så over i raskere fart: et døgn på knapt tre minutter.
+  var START = F.redusert ? 19.75 : 19.45;
+  var SAKTE = 0.045, FORT = 0.15, OVERGANG = 20, MYK = 4; // timer per sekund, sekunder
+  function klokkeslett(sek) {
+    var x = (sek - OVERGANG) / MYK, myk = x > 30 ? x : Math.log1p(Math.exp(x));
+    return START + SAKTE * sek + (FORT - SAKTE) * MYK * myk;
+  }
+  var LAV = 42, HOY = 288;   // Svolvær-aktig spenn, cm over sjøkartnull
+  var el = {
+    klokke: document.getElementById('heltKlokke'), cm: document.getElementById('heltCm'),
+    pil: document.getElementById('heltPil'), linje: document.getElementById('heltLinje'),
+    aksent: document.querySelector('.helt h1 span')
+  };
+  var sist = { cm: null, klokke: null, stiger: null, linje: null, aksent: null };
+  // På store skjermer står månen over avlesningen, innenfor innholdsbredden.
+  var maaneXStor = 0.84;
+  function plasserMaane() {
+    var W = window.innerWidth, kant = Math.min(56, Math.max(20, W * 0.05));
+    var renne = Math.max(kant, (W - 1120) / 2 + kant);
+    maaneXStor = (W - renne - 34) / W;
+  }
+  plasserMaane();
+  window.addEventListener('resize', plasserMaane);
+  F.lerret(document.getElementById('heltSjo'), function (sek) {
+    var time = klokkeslett(sek);
+    var h = F.solhoyde(time);
+    var p = F.palettFor(h, F.solStiger(time));
+    return {
+      palett: p, hoyde: h, time: time, nivaa: F.nivaa(time), energi: F.energi(time),
+      maaneAlder: 12.5, maaneX: smal.matches ? 0.8 : maaneXStor, maaneY: smal.matches ? 0.17 : 0.14,
+      topp: smal.matches ? 0.8 : 0.66, bunn: smal.matches ? 0.92 : 0.86,
+      amp: smal.matches ? 0.5 : 0.75, detalj: smal.matches ? 'lett' : 'full'
+    };
+  }, {
+    etter: function (s) {
+      var time = s.time;
+      var verdi = F.cm(time, LAV, HOY);
+      if (verdi !== sist.cm) { el.cm.textContent = verdi; sist.cm = verdi; }
+      var kl = 'kl. ' + F.klokke(time);
+      if (kl !== sist.klokke) { el.klokke.textContent = kl; sist.klokke = kl; }
+      var opp = F.stiger(time);
+      if (opp !== sist.stiger) { el.pil.style.transform = opp ? 'none' : 'rotate(90deg)'; sist.stiger = opp; }
+      var snu = F.nesteSnu(time);
+      var linje = (snu.hoy ? 'Høyvann' : 'Lavvann') + ' kl. ' + F.klokke(time + snu.om);
+      if (linje !== sist.linje) { el.linje.textContent = linje; sist.linje = linje; }
+      var a = 'rgb(' + s.palett.accent.map(Math.round).join(',') + ')';
+      if (a !== sist.aksent) { el.aksent.style.color = a; el.pil.style.color = a; sist.aksent = a; }
     }
-    requestAnimationFrame(tikk);
+  });
+
+  // ================= Telefonen du drar i =================
+  (function () {
+    var NAA = 10.5, BAK = -6, FRAM = 24;
+    var kurve = document.getElementById('tlfKurve');
+    var linje = document.getElementById('tlfLinje'), fyll = document.getElementById('tlfFyll');
+    var prikk = document.getElementById('tlfPrikk'), naaStrek = document.getElementById('tlfNaa');
+    var cmEl = document.getElementById('tlfCm'), tidEl = document.getElementById('tlfTid');
+    var trend = document.getElementById('tlfTrend'), hint = document.getElementById('tlfHint');
+    var snu1 = document.getElementById('tlfSnu1'), snu2 = document.getElementById('tlfSnu2');
+    var W = 300, H = 84, PAD = 12;
+    var forskyvning = 0, slippetFra = null, slippTid = 0, drar = false, rort = false, demo = null;
+
+    function x(time) { return (time - (NAA + BAK)) / (FRAM - BAK) * W; }
+    function y(time) { return PAD + (H - 2 * PAD) * (1 - F.nivaa(time)); }
+    // Kurven er fast: −6 t til +24 t rundt «nå».
+    var d = '', f = 'M0 ' + H;
+    for (var i = 0; i <= 120; i++) {
+      var t = NAA + BAK + (FRAM - BAK) * i / 120;
+      d += (i ? ' L' : 'M') + x(t).toFixed(1) + ' ' + y(t).toFixed(1);
+      f += ' L' + x(t).toFixed(1) + ' ' + y(t).toFixed(1);
+    }
+    linje.setAttribute('d', d);
+    fyll.setAttribute('d', f + ' L' + W + ' ' + H + ' Z');
+    naaStrek.setAttribute('x1', x(NAA)); naaStrek.setAttribute('x2', x(NAA));
+
+    function vis() {
+      var time = NAA + forskyvning;
+      prikk.setAttribute('cx', x(time).toFixed(1));
+      prikk.setAttribute('cy', y(time).toFixed(1));
+      prikk.setAttribute('fill', Math.abs(forskyvning) > 0.05 ? '#8FD8FF' : '#F4FAFD');
+      cmEl.textContent = F.cm(time, 30, 296);
+      trend.textContent = F.stiger(time) ? 'Stigende sjø' : 'Fallende sjø';
+      tidEl.textContent = (Math.abs(forskyvning) > 0.05 ? 'kl. ' : 'Nå, kl. ') + F.klokke(time);
+      var s = F.nesteSnu(time), s2 = F.nesteSnu(time + s.om + 0.05);
+      snu1.textContent = (s.hoy ? 'Høyvann ' : 'Lavvann ') + F.klokke(time + s.om);
+      snu2.textContent = (s2.hoy ? 'Høyvann ' : 'Lavvann ') + F.klokke(time + s.om + 0.05 + s2.om);
+      kurve.setAttribute('aria-valuenow', forskyvning.toFixed(1));
+      kurve.setAttribute('aria-valuetext', Math.abs(forskyvning) < 0.05 ? 'Nå, ' + cmEl.textContent + ' centimeter'
+        : 'Klokka ' + F.klokke(time) + ', ' + cmEl.textContent + ' centimeter');
+    }
+
+    var sjo = F.lerret(document.getElementById('telefonSjo'), function (sek) {
+      // Fjæra hjem: kritisk dempet, som appens skrubbing (§ 7.5).
+      if (slippetFra != null) {
+        var tt = (performance.now() - slippTid) / 1000, w0 = 11.4;
+        forskyvning = slippetFra * (1 + w0 * tt) * Math.exp(-w0 * tt);
+        if (Math.abs(forskyvning) < 0.01) { forskyvning = 0; slippetFra = null; }
+      }
+      var time = NAA + forskyvning;
+      var h = F.solhoyde(time);
+      return {
+        palett: F.palettFor(h, F.solStiger(time)), hoyde: h, time: time,
+        nivaa: F.nivaa(time), energi: F.energi(time), maaneAlder: 12.5,
+        maaneX: 0.78, maaneY: 0.12, topp: 0.36, bunn: 0.62, amp: 0.32, detalj: 'lett'
+      };
+    }, { etter: vis });
+
+    function tilTid(clientX) {
+      var r = kurve.getBoundingClientRect();
+      var andel = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+      return BAK + (FRAM - BAK) * andel;
+    }
+    function stoppDemo() { if (demo) { cancelAnimationFrame(demo); demo = null; } }
+    kurve.addEventListener('pointerdown', function (e) {
+      stoppDemo(); rort = true; drar = true; slippetFra = null;
+      hint.classList.remove('vises');
+      kurve.setPointerCapture(e.pointerId);
+      forskyvning = tilTid(e.clientX);
+      sjo.tegnNaa(); sjo.vekk();
+    });
+    kurve.addEventListener('pointermove', function (e) {
+      if (!drar) return;
+      forskyvning = tilTid(e.clientX);
+      sjo.tegnNaa();
+    });
+    function slipp() {
+      if (!drar) return;
+      drar = false;
+      if (F.redusert) { forskyvning = 0; sjo.tegnNaa(); return; }
+      slippetFra = forskyvning; slippTid = performance.now(); sjo.vekk();
+    }
+    kurve.addEventListener('pointerup', slipp);
+    kurve.addEventListener('pointercancel', slipp);
+    kurve.addEventListener('keydown', function (e) {
+      var steg = { ArrowRight: 0.5, ArrowUp: 0.5, ArrowLeft: -0.5, ArrowDown: -0.5 }[e.key];
+      if (e.key === 'Escape' || e.key === 'Home') { forskyvning = 0; }
+      else if (steg != null) { forskyvning = Math.min(FRAM, Math.max(BAK, forskyvning + steg)); }
+      else return;
+      e.preventDefault(); stoppDemo(); rort = true; slippetFra = null; sjo.tegnNaa();
+    });
+
+    // Første gang telefonen synes: én rolig demonstrasjon av grepet.
+    if (!F.redusert && 'IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (p) {
+        if (!p[0].isIntersecting || rort) return;
+        obs.disconnect();
+        setTimeout(function () {
+          if (rort) return;
+          hint.classList.add('vises');
+          var t0 = performance.now(), varighet = 4200;
+          (function steg(naa) {
+            if (rort) return;
+            var a = Math.min(1, (naa - t0) / varighet);
+            var e = a < 0.5 ? 4 * a * a * a : 1 - Math.pow(-2 * a + 2, 3) / 2;
+            forskyvning = 10 * Math.sin(Math.PI * e);
+            sjo.tegnNaa();
+            if (a < 1) demo = requestAnimationFrame(steg);
+            else { demo = null; forskyvning = 0; setTimeout(function () { hint.classList.remove('vises'); }, 1600); }
+          })(t0);
+        }, 700);
+      }, { threshold: 0.6 });
+      obs.observe(kurve);
+    }
   })();
 
-  // Innholdet avsløres når det scroller inn.
+  // ================= Månen: en måned med tidevann =================
+  // Tegnes i CSS-piksler (viewBox = boksens bredde), så tekst og måner har
+  // samme størrelse på telefon som på stor skjerm. Bygges på nytt ved ny bredde.
   (function () {
-    var elementer = document.querySelectorAll('.avsl');
-    if (!('IntersectionObserver' in window)) {
-      elementer.forEach(function (e) { e.classList.add('synlig'); });
-      return;
+    var boks = document.getElementById('maaned'), DAGER = 29.53, bygdFor = 0;
+    // Månefasene: full, siste kvarter, ny, første kvarter, full.
+    var faser = [[0, 14.77, true], [7.38, 22.15, false], [14.77, 0.01, true], [22.15, 7.38, false], [29.53, 14.77, true]];
+    function A(dag) { return 0.6 + 0.4 * Math.cos(2 * Math.PI * dag / (DAGER / 2)); }
+    function maane(cx, cy, r, alder) {
+      var phi = 2 * Math.PI * alder / DAGER, c = Math.cos(phi), vokser = alder < DAGER / 2;
+      var rx = Math.max(0.01, r * Math.abs(c)).toFixed(2);
+      var limb = vokser ? 1 : 0, gibbous = c < 0;
+      var term = vokser ? (gibbous ? 1 : 0) : (gibbous ? 0 : 1);
+      var lys = 'M' + cx + ' ' + (cy - r) + ' A' + r + ' ' + r + ' 0 0 ' + limb + ' ' + cx + ' ' + (cy + r) +
+                ' A' + rx + ' ' + r + ' 0 0 ' + term + ' ' + cx + ' ' + (cy - r) + ' Z';
+      return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#123552" stroke="rgba(221,241,250,.3)" stroke-width="1"/>' +
+             '<path d="' + lys + '" fill="#F2EAD3"/>';
     }
+    function bygg() {
+      var W = Math.round(boks.clientWidth);
+      if (!W || Math.abs(W - bygdFor) < 8) return;
+      bygdFor = W;
+      var smal = W < 560;
+      var H = smal ? 240 : 300, r = smal ? 13 : 16, cy = r + 2, yLapp = cy + r + 21;
+      var X0 = r + 1, X1 = W - r - 1, topp = yLapp + 26, bunn = H - 28;
+      var MID = (topp + bunn) / 2 + 4, AMP = (bunn - topp) / 2 - 4;
+      function xd(dag) { return X0 + (X1 - X0) * dag / DAGER; }
+      var d = '', f = 'M' + X0 + ' ' + H, konv = '', N = Math.max(700, W * 2);
+      for (var i = 0; i <= N; i++) {
+        var dag = DAGER * i / N;
+        var yy = MID - AMP * A(dag) * Math.cos(2 * Math.PI * dag * 24 / 12.42);
+        d += (i ? ' L' : 'M') + xd(dag).toFixed(1) + ' ' + yy.toFixed(1);
+        f += ' L' + xd(dag).toFixed(1) + ' ' + yy.toFixed(1);
+        if (i % 10 === 0) konv += (i ? ' L' : 'M') + xd(dag).toFixed(1) + ' ' + (MID - AMP * A(dag) - 7).toFixed(1);
+      }
+      f += ' L' + X1 + ' ' + H + ' Z';
+      var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" aria-hidden="true">' +
+        '<defs><linearGradient id="maanedFyll" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#2E8FC4" stop-opacity=".34"/><stop offset="1" stop-color="#2E8FC4" stop-opacity="0"/></linearGradient></defs>' +
+        '<path class="fyll" d="' + f + '"/>' +
+        '<path class="konvolutt" d="' + konv + '"/>' +
+        '<path class="kurven tegnes" pathLength="1" d="' + d + '" style="stroke-width:' + (smal ? 1.1 : 1.4) + '"/>';
+      faser.forEach(function (fa, k) {
+        var cx = +xd(fa[0]).toFixed(1);
+        var anker = k === 0 ? 'start' : k === 4 ? 'end' : 'middle', dx = k === 0 ? -r : k === 4 ? r : 0;
+        svg += '<g class="maane" style="transition-delay:' + (400 + k * 380) + 'ms">' + maane(cx, cy, r, fa[1]) +
+               '<text class="etikett' + (fa[2] ? ' sterk' : '') + '" x="' + cx + '" y="' + yLapp + '" text-anchor="' + anker + '" dx="' + dx + '">' +
+               (fa[2] ? 'Springflo' : 'Nippflo') + '</text></g>';
+      });
+      for (var u = 0; u <= 4; u++) {
+        svg += '<text class="dag" x="' + xd(u * 7.38).toFixed(1) + '" y="' + (H - 5) + '" text-anchor="' +
+               (u === 0 ? 'start' : u === 4 ? 'end' : 'middle') + '" dx="' + (u === 0 ? -r : u === 4 ? r : 0) + '">dag ' + (Math.floor(u * 7.38) + 1) + '</text>';
+      }
+      boks.innerHTML = svg + '</svg>';
+    }
+    bygg();
+    if ('ResizeObserver' in window) new ResizeObserver(bygg).observe(boks);
+    if (F.redusert || !('IntersectionObserver' in window)) { boks.classList.add('vist'); return; }
+    var obs = new IntersectionObserver(function (p) {
+      if (p[0].isIntersecting) { boks.classList.add('vist'); obs.disconnect(); }
+    }, { threshold: 0.35 });
+    obs.observe(boks);
+  })();
+
+  // ================= Kysten: høyvannet vandrer nordover =================
+  (function () {
+    var K = window.FLO_KYST; if (!K) return;
+    var boks = document.getElementById('kyst'), lerret = document.getElementById('kystLerret');
+    var ctx = lerret.getContext('2d');
+    var n = K.p.length / 4, PERIODE = 7, synlig = false, ramme = null, t0 = performance.now(), dpr = 1, w = 0, h = 0;
+    var nivaer = 10, stier = [];
+    // Steder som hjelper øyet, plassert med samme projeksjon som prikkene.
+    [['Oslo', 59.91, 10.75], ['Bergen', 60.39, 5.32], ['Trondheim', 63.43, 10.39],
+     ['Bodø', 67.28, 14.4], ['Tromsø', 69.65, 18.96], ['Vardø', 70.37, 31.1]].forEach(function (s) {
+      var e = document.createElement('span');
+      e.className = 'navn'; e.textContent = s[0];
+      e.style.left = ((s[2] - K.lon0) * K.c * K.s / K.b * 100) + '%';
+      e.style.top = ((K.lat0 - s[1]) * K.s / K.h * 100) + '%';
+      if (s[0] === 'Vardø') e.classList.add('venstre');
+      boks.appendChild(e);
+    });
+    function mal() {
+      var r = lerret.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = Math.round(r.width * dpr); h = Math.round(r.height * dpr);
+      lerret.width = w; lerret.height = h;
+    }
+    function tegn(naa) {
+      ramme = null;
+      var t = F.redusert ? 0 : (naa - t0) / 1000;
+      var sx = w / K.b, sy = h / K.h;
+      ctx.clearRect(0, 0, w, h);
+      for (var l = 0; l < nivaer; l++) stier[l] = new Path2D();
+      var vinkel = 2 * Math.PI * t / PERIODE;
+      for (var i = 0; i < n; i++) {
+        var b = i * 4, G = K.p[b + 2] * Math.PI / 180, a = K.p[b + 3];
+        // Fasen skiller bare ~110° fra Stad til Vardø; spissere lys gjør
+        // at bølgetoppen synes å vandre i stedet for at hele kysten blinker.
+        var lys = Math.pow(0.5 + 0.5 * Math.cos(vinkel - G), 5);
+        // Små amplituder (Skagerrak) lyser svakt: der er det knapt tidevann.
+        lys *= Math.min(1, 0.25 + Math.sqrt(a) / 9);
+        var lv = Math.min(nivaer - 1, Math.floor(lys * nivaer));
+        var r = (0.8 + Math.min(1.4, Math.sqrt(a) / 7)) * dpr;
+        stier[lv].moveTo(K.p[b] * sx + r, K.p[b + 1] * sy);
+        stier[lv].arc(K.p[b] * sx, K.p[b + 1] * sy, r, 0, 6.2832);
+      }
+      for (var k = 0; k < nivaer; k++) {
+        var v = k / (nivaer - 1);
+        ctx.fillStyle = 'rgba(' + Math.round(70 + 151 * v) + ',' + Math.round(130 + 111 * v) + ',' + Math.round(180 + 70 * v) + ',' + (0.22 + 0.78 * v).toFixed(3) + ')';
+        ctx.fill(stier[k]);
+      }
+      if (!F.redusert && synlig && !document.hidden) ramme = requestAnimationFrame(tegn);
+    }
+    mal();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { mal(); tegn(performance.now()); }).observe(lerret);
+    new IntersectionObserver(function (p) {
+      synlig = p[0].isIntersecting;
+      if (synlig && ramme == null) ramme = requestAnimationFrame(tegn);
+    }, { rootMargin: '60px' }).observe(lerret);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden && synlig && ramme == null) ramme = requestAnimationFrame(tegn); });
+    tegn(performance.now());
+  })();
+
+  // ================= Tellerne =================
+  (function () {
+    var tall = document.querySelectorAll('[data-teller]');
+    if (F.redusert || !('IntersectionObserver' in window)) return;
+    function format(v, e) { return e.dataset.format === 'tusen' ? String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : String(v); }
     var obs = new IntersectionObserver(function (poster) {
       poster.forEach(function (p) {
-        if (p.isIntersecting) { p.target.classList.add('synlig'); obs.unobserve(p.target); }
+        if (!p.isIntersecting) return;
+        obs.unobserve(p.target);
+        var e = p.target, mal = +e.dataset.teller, t0 = performance.now();
+        if (!mal) return;
+        (function steg(naa) {
+          var a = Math.min(1, (naa - t0) / 1600), eased = 1 - Math.pow(1 - a, 4);
+          e.textContent = format(Math.round(mal * eased), e);
+          if (a < 1) requestAnimationFrame(steg);
+        })(t0);
       });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    elementer.forEach(function (e) { obs.observe(e); });
+    }, { threshold: 0.8 });
+    tall.forEach(function (e) { obs.observe(e); });
   })();
-</script>
 
+  // ================= Galleriet =================
+  (function () {
+    var g = document.getElementById('galleri');
+    document.querySelectorAll('.galleri-styring button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var steg = g.querySelector('figure').getBoundingClientRect().width + parseFloat(getComputedStyle(g).columnGap || 28);
+        g.scrollBy({ left: steg * (+b.dataset.retning), behavior: F.redusert ? 'auto' : 'smooth' });
+      });
+    });
+  })();
+})();
+</script>
 </body>
 </html>

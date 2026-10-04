@@ -1,0 +1,235 @@
+/* Flo og Fjære — felles uttrykk for forsiden, vilkårene og personvernet.
+   Fargene er appens (Palette.swift), skriften appens stemme: SF Rounded
+   der den finnes (Apple-enheter), systemskrift ellers. */
+
+:root {
+  --dypt: #08243C;
+  --dypt-myk: #0D3A5C;
+  --dypest: #061A2B;
+  --natt: #03121F;
+  --himmel-topp: #0F4C75;
+  --himmel-bunn: #1B6FA8;
+  --vann: #2E8FC4;
+  --vann-dypt: #062A47;
+  --kam: #DDF1FA;
+  --horisont: #7FB8D9;
+  --aksent: #8FD8FF;
+  --sol: #FFD25E;
+  --skumring: #FFD9BE;
+  --tekst: #F4FAFD;
+  --dempet: rgba(244, 250, 253, .74);
+  --svak: rgba(244, 250, 253, .56);
+  --linje: rgba(221, 241, 250, .14);
+  --linje-sterk: rgba(221, 241, 250, .26);
+
+  --rund: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, sans-serif;
+  --brod: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  --ut: cubic-bezier(0.23, 1, 0.32, 1);
+  --inn-ut: cubic-bezier(0.77, 0, 0.175, 1);
+  --tidevann: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --kant: clamp(20px, 5vw, 56px);
+  --bredde: 1120px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 24px;
+}
+body {
+  font-family: var(--brod);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--tekst);
+  background: var(--dypt);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-kerning: normal;
+  overflow-x: clip;
+}
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: var(--aksent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+::selection { background: rgba(143, 216, 255, .32); }
+:focus-visible { outline: 2px solid var(--aksent); outline-offset: 3px; border-radius: 6px; }
+
+.rund { font-family: var(--rund); }
+.tall { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+.skjult {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.hopp {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  padding: 10px 16px; border-radius: 12px; background: var(--tekst); color: var(--dypt);
+  font-weight: 600; text-decoration: none; transition: top 160ms var(--ut);
+}
+.hopp:focus { top: 12px; }
+
+.bredde { width: 100%; max-width: var(--bredde); margin: 0 auto; padding: 0 var(--kant); }
+
+/* ---------- Toppfeltet ---------- */
+.topp {
+  position: absolute; z-index: 10; inset: 0 0 auto 0;
+  display: flex; align-items: center; justify-content: space-between;
+  /* Følger innholdsbredden, så merket står over overskriften på store skjermer. */
+  padding: 18px max(var(--kant), calc((100% - var(--bredde)) / 2 + var(--kant)));
+}
+.merke {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--tekst); text-decoration: none;
+  font-family: var(--rund); font-weight: 650; font-size: 17px; letter-spacing: -.01em;
+}
+.merke img { width: 30px; height: 30px; border-radius: 7px; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.topp nav { display: flex; gap: 26px; }
+.topp nav a {
+  color: var(--dempet); text-decoration: none; font-size: 15px;
+  transition: color 160ms ease;
+}
+.topp nav a:hover { color: var(--tekst); }
+@media (max-width: 719px) { .topp nav .kan-skjules { display: none; } }
+
+/* ---------- App Store-merket ---------- */
+.butikk { display: inline-block; transition: transform 160ms var(--ut); }
+.butikk:active { transform: scale(.97); }
+.butikk img { height: 50px; width: auto; }
+
+/* ---------- Overskrifter ---------- */
+.overline {
+  font-family: var(--rund); font-size: 13px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--aksent);
+}
+.stor {
+  font-family: var(--rund); font-weight: 700;
+  font-size: clamp(32px, 6vw, 60px); line-height: 1.04; letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.mellom {
+  font-family: var(--rund); font-weight: 700;
+  font-size: clamp(26px, 4.2vw, 40px); line-height: 1.1; letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.ingress {
+  font-size: clamp(18px, 2.1vw, 21px); line-height: 1.55; color: var(--dempet);
+  text-wrap: pretty; max-width: 34em;
+}
+
+/* ---------- Avsløring ---------- */
+[data-avsl] {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 900ms var(--ut), transform 900ms var(--ut);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+[data-avsl].vist { opacity: 1; transform: none; }
+
+/* ---------- Bunnteksten ---------- */
+/* Bunnen er sjøen: mørkt vann under en levende vannlinje. Bakgrunnen starter
+   18 px ned, og resten fylles av bølgeformen selv, så kanten aldri er rett. */
+.bunn { position: relative; margin-top: clamp(80px, 12vw, 140px); background: linear-gradient(transparent 17px, var(--dypest) 17px); }
+.bunn-linje { position: absolute; left: 0; right: 0; top: -18px; width: 100%; height: 36px; overflow: visible; }
+.bunn-linje .fyll { fill: var(--dypest); }
+.bunn-linje .bak { fill: none; stroke: var(--kam); stroke-opacity: .18; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.bunn-linje .strek { fill: none; stroke: var(--kam); stroke-opacity: .55; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.bunn-innhold {
+  display: grid; gap: 28px; padding-top: 56px; padding-bottom: 48px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) { .bunn-innhold { grid-template-columns: 1.4fr 1fr 1fr; } }
+.bunn h2 {
+  font-family: var(--rund); font-size: 13px; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--svak); margin-bottom: 12px;
+}
+.bunn ul { list-style: none; display: grid; gap: 8px; }
+.bunn a { color: var(--tekst); text-decoration: none; }
+.bunn a:hover { color: var(--aksent); }
+.bunn p { color: var(--svak); font-size: 15px; line-height: 1.6; }
+.bunn .smaa {
+  border-top: 1px solid var(--linje); padding: 22px 0 36px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
+  color: var(--svak); font-size: 14px;
+}
+
+/* ---------- Juridiske sider ---------- */
+.side-hode {
+  position: relative; overflow: hidden;
+  height: clamp(300px, 44vh, 400px);
+}
+.side-hode canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.side-hode .bredde { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; }
+.side-hode .overline { transition: color 1.2s ease; }
+.side-hode h1 { font-family: var(--rund); font-weight: 700; font-size: clamp(36px, 6.4vw, 60px); letter-spacing: -.03em; line-height: 1.05; }
+.side-hode .dato { margin-top: 10px; color: var(--dempet); font-size: 15px; }
+.side-hode::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 40%; z-index: 1;
+  background: linear-gradient(rgba(8, 36, 60, 0), var(--dypt)); pointer-events: none;
+}
+
+.juss {
+  display: grid; gap: 40px; grid-template-columns: 1fr;
+  padding-top: clamp(24px, 4vw, 48px);
+}
+@media (min-width: 960px) { .juss { grid-template-columns: 220px minmax(0, 1fr); gap: 72px; } }
+.innhold-liste { font-size: 15px; }
+.innhold-liste ol { list-style: none; display: grid; gap: 2px; counter-reset: punkt; }
+.innhold-liste li { counter-increment: punkt; }
+.innhold-liste a {
+  display: flex; gap: 12px; padding: 7px 0; color: var(--dempet); text-decoration: none;
+  transition: color 160ms ease;
+}
+.innhold-liste a::before { content: counter(punkt, decimal-leading-zero); font-family: var(--rund); font-variant-numeric: tabular-nums; color: var(--svak); min-width: 1.6em; transition: color 160ms ease; }
+.innhold-liste a:hover, .innhold-liste a[aria-current="true"] { color: var(--tekst); }
+.innhold-liste a[aria-current="true"]::before { color: var(--aksent); }
+@media (min-width: 960px) { .innhold-liste nav { position: sticky; top: 32px; } }
+@media (max-width: 959px) {
+  .innhold-liste { border-top: 1px solid var(--linje); border-bottom: 1px solid var(--linje); padding: 14px 0; }
+  .innhold-liste ol { grid-template-columns: 1fr 1fr; column-gap: 20px; }
+}
+
+.tekst { max-width: 38em; }
+.tekst .kort {
+  position: relative; padding: 22px 24px 22px 26px; margin-bottom: 8px;
+  border-radius: 18px; font-size: 18px; line-height: 1.55;
+  background: linear-gradient(135deg, rgba(46, 143, 196, .16), rgba(46, 143, 196, .04));
+  border: 1px solid var(--linje);
+}
+.tekst section { padding-top: 40px; }
+.tekst section + section { margin-top: 4px; border-top: 1px solid var(--linje); }
+.tekst h2 {
+  display: flex; align-items: baseline; gap: 14px;
+  font-family: var(--rund); font-size: 22px; font-weight: 650; letter-spacing: -.015em;
+  margin-bottom: 12px;
+}
+.tekst h2 .nr { font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 600; color: var(--aksent); letter-spacing: .04em; }
+.tekst p { color: var(--dempet); }
+.tekst p + p { margin-top: 12px; }
+.tekst strong { color: var(--tekst); font-weight: 600; }
+.tekst ul { list-style: none; display: grid; gap: 0; margin-top: 6px; }
+.tekst ul li {
+  position: relative; padding: 11px 0 11px 30px; color: var(--dempet);
+  border-bottom: 1px solid var(--linje);
+}
+.tekst ul li::before {
+  content: ""; position: absolute; left: 2px; top: 50%; width: 14px; height: 2px;
+  border-radius: 2px; background: var(--aksent); transform: translateY(-50%);
+}
+.engelsk { margin-top: 48px; padding: 24px; border-radius: 18px; border: 1px solid var(--linje); background: rgba(3, 18, 31, .35); }
+.engelsk h2 { font-size: 18px; }
+.engelsk p { font-size: 15.5px; }
+
+.tilbake {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 48px;
+  color: var(--tekst); text-decoration: none; font-family: var(--rund); font-weight: 600;
+}
+.tilbake svg { transition: transform 200ms var(--ut); }
+.tilbake:hover svg { transform: translateX(-3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-avsl] { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
